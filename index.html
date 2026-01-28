@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Rate my Ala-Too</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <div id="loading" class="loading">
+        <img src="loading.gif" alt="Loading" class="loading__gif" />
+        <div class="loading__text">LOADING</div>
+    </div>
+  <header class="topbar">
+    <div class="wrap topbar__row">
+      <a class="brand" href="#">
+        
+        <img class="brand__logo" src="logo.png" alt="Logo" onerror="this.style.display='none'">
+        <div class="brand__text">
+          <div class="brand__title">Rate my Ala-Too</div>
+          <div class="brand__subtitle">Рейтинги преподавателей</div>
+        </div>
+      </a>
+
+      <div class="topbar__actions">
+        <a id="formLink" class="btn btn--primary" href="#" target="_blank" rel="noopener">Оставить отзыв</a>
+        <a id="reportLink" class="btn" href="#" target="_blank" rel="noopener">Report на сайт!</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="controls card">
+      <div class="controls__grid">
+        <label class="field">
+          <span class="field__label">Поиск</span>
+          <input id="searchInput" class="input" placeholder="Введите имя преподавателя..." />
+        </label>
+
+        <label class="field">
+          <span class="field__label">Сортировка</span>
+          <select id="sortSelect" class="input">
+            <option value="quality_desc">Качество ↓</option>
+            <option value="quality_asc">Качество ↑</option>
+            <option value="responses_desc">Отзывов ↓</option>
+            <option value="strict_desc">Строгость ↓</option>
+            <option value="strict_asc">Строгость ↑</option>
+            <option value="name_asc">Имя (A→Z)</option>
+          </select>
+        </label>
+
+        <div class="miniStats">
+          <div class="miniStat">
+            <div class="miniStat__label">Всего отзывов</div>
+            <div id="totalResponses" class="miniStat__value">—</div>
+          </div>
+          <div class="miniStat">
+            <div class="miniStat__label">Преподавателей</div>
+            <div id="totalProfessors" class="miniStat__value">—</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="status" class="status card">
+      <div class="status__title">Загрузка…</div>
+      <div class="status__text">Если список не появится — проверь ссылку на форму и доступ к таблице.</div>
+    </section>
+
+    <section id="grid" class="grid"></section>
+
+    <section id="empty" class="empty card hidden">
+      <h2>Ничего не найдено</h2>
+      <p class="muted">Попробуй другой запрос или сортировку.</p>
+    </section>
+  </main>
+
+  <!-- MODAL -->
+  <div id="modal" class="modal hidden" aria-hidden="true">
+    <div class="modal__backdrop" data-close="1"></div>
+    <div class="modal__panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal__header">
+        <div>
+          <h2 id="modalTitle" class="modal__title">—</h2>
+          <div id="modalSubtitle" class="modal__subtitle muted">—</div>
+        </div>
+        <button class="iconBtn" type="button" data-close="1" aria-label="Закрыть">✕</button>
+      </div>
+
+      <div id="modalBody" class="modal__body"></div>
+
+      <div class="modal__footer">
+        <a id="modalFormLink" class="btn btn--primary" href="#" target="_blank" rel="noopener">Оставить отзыв</a>
+        <button class="btn" type="button" data-close="1">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
