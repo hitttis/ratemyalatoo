@@ -1,6 +1,6 @@
 /* ========= ВСТАВЬ СЮДА СВОИ ССЫЛКИ ========= */
 const SHEET_URL =
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vThepfVPAV7nRGgU6vKdxlN7pBOiNFuQM9MwVVRyEmFVFgbHsW3KpjvlpVXsT65mLijkPVGa7JZqrc_/pub?gid=243273262&single=true&output=csv";
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vThepfVPAV7nRGgU6vKdxlN7pBOiNFuQM9MwVVRyEmFVFgbHsW3KpjvlpVXsT65mLijkPVGa7JZqrc_/pub?gid=507475385&single=true&output=csv";
 
 const FORM_URL = "https://forms.gle/3GgeJSzXh2sK1rHJ9";
 const REPORT_URL = "https://forms.gle/beKtbsgbV8Rxr9jg7";
@@ -403,3 +403,4 @@ init();
 
 
 window.closeModal = closeModal;
+
