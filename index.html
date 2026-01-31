@@ -1,23 +1,18 @@
 <!doctype html>
-<html lang="ru">
+<html lang="ru" data-theme="dark">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Rate my Ala-Too</title>
-  <meta name="description"
-content="Rate My Alatoo — студенческая платформа для отзывов
-о преподавателях Ala-Too International University." />
   <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="favicon.png">
 </head>
 <body>
-    <div id="loading" class="loading">
-        <img src="loading.gif" alt="Loading" class="loading__gif" />
-        <div class="loading__text">LOADING</div>
-    </div>
+
   <header class="topbar">
     <div class="wrap topbar__row">
-      <a class="brand" href="#">
-        
+      <a class="brand" href="index.html" aria-label="Главная">
         <img class="brand__logo" src="logo.png" alt="Logo" onerror="this.style.display='none'">
         <div class="brand__text">
           <div class="brand__title">Rate my Ala-Too</div>
@@ -26,80 +21,123 @@ content="Rate My Alatoo — студенческая платформа для �
       </a>
 
       <div class="topbar__actions">
-        <a id="formLink" class="btn btn--primary" href="#" target="_blank" rel="noopener">Оставить отзыв</a>
-        <a id="reportLink" class="btn" href="#" target="_blank" rel="noopener">Report на сайт!</a>
+        <button class="iconToggle" id="themeToggle" type="button" aria-label="Сменить тему" title="Сменить тему">
+          <span class="iconToggle__icon" aria-hidden="true" id="themeIcon"></span>
+          <span class="iconToggle__text" id="themeLabel">Тёмная</span>
+        </button>
+
+        <a class="btn btn--primary" href="app.html">Перейти к преподавателям</a>
       </div>
     </div>
   </header>
 
   <main class="wrap">
-    <section class="controls card">
-      <div class="controls__grid">
-        <label class="field">
-          <span class="field__label">Поиск</span>
-          <input id="searchInput" class="input" placeholder="Введите имя преподавателя..." />
-        </label>
+    <section class="landingHero card">
+      <div class="landingHero__left">
+        <div class="pillTop">🎓 Students-made · Быстро · Понятно</div>
+        <h1 class="landingHero__title">Сайт, который помогает выбрать преподавателя</h1>
+        <p class="landingHero__text muted">
+          Здесь студенты оставляют оценки и короткие сигналы о стиле курса:
+          насколько качественно, насколько строго, и какие особенности встречаются чаще всего.
+          Цель — сделать выбор курса проще и честнее.
+        </p>
 
-        <label class="field">
-          <span class="field__label">Сортировка</span>
-          <select id="sortSelect" class="input">
-            <option value="quality_desc">Качество ↓</option>
-            <option value="quality_asc">Качество ↑</option>
-            <option value="responses_desc">Отзывов ↓</option>
-            <option value="strict_desc">Строгость ↓</option>
-            <option value="strict_asc">Строгость ↑</option>
-            <option value="name_asc">Имя (A→Z)</option>
-          </select>
-        </label>
+        <div class="landingHero__cta">
+          <a class="btn btn--primary btn--lg" href="app.html">Открыть список преподавателей</a>
+          <a class="btn btn--ghost btn--lg" href="app.html#leave-review">Оставить отзыв</a>
+        </div>
 
-        <div class="miniStats">
-          <div class="miniStat">
-            <div class="miniStat__label">Всего отзывов</div>
-            <div id="totalResponses" class="miniStat__value">—</div>
+        <div class="landingHero__mini">
+          <div class="miniItem">
+            <div class="miniItem__title">Не справедливая оценка?</div>
+            <div class="miniItem__text muted">Оставь отзыв, из-за чего получил?</div>
           </div>
-          <div class="miniStat">
-            <div class="miniStat__label">Преподавателей</div>
-            <div id="totalProfessors" class="miniStat__value">—</div>
+          <div class="miniItem">
+            <div class="miniItem__title">Теги</div>
+            <div class="miniItem__text muted">“много домашки”, “полезный фидбек” и т.д.</div>
+          </div>
+          <div class="miniItem">
+            <div class="miniItem__title">Комменты мы не добавим!</div>
+            <div class="miniItem__text muted">Модерация у нас не так развита =((</div>
+          </div>
+          <div class="miniItem">
+            <div class="miniItem__title">Хорошее дело, всегда возвращяется!</div>
+            <div class="miniItem__text muted">Оставь отзыв - помоги будущему студенту выбрать преподавателя</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="landingHero__right">
+        <div class="previewCard">
+          <div class="previewCard__top">
+            <span class="previewBadge">Пример карточки</span>
+            <div class="previewScore">
+              <span class="scoreDot dot--good"></span>
+              <span class="previewScore__num score--good">4.6</span>
+              <span class="muted">/ 5</span>
+            </div>
+          </div>
+
+          <div class="previewCard__name">Asanov Uson</div>
+          <div class="previewCard__sub muted">Отзывов: 27 · Снова бы взяли: 78%</div>
+
+          <div class="previewCard__chips">
+            <span class="chip">Полезный фидбек</span>
+            <span class="chip">Важна активность</span>
+            <span class="chip">Хорошее чувство юмора</span>
+          </div>
+
+          <div class="previewCard__hint muted">
+            Нажми «Открыть список преподавателей», чтобы посмотреть реальные рейтинги.
           </div>
         </div>
       </div>
     </section>
 
-    <section id="status" class="status card">
-      <div class="status__title">Загрузка…</div>
-      <div class="status__text">Если список не появится — проверь ссылку на форму и доступ к таблице.</div>
+    <section class="landingGrid">
+      <article class="gCard card">
+        <img class="gCard__img" src="images/cat_is_watching-alatoo.jpg" alt="Study" loading="lazy">
+        <div class="gCard__body">
+          <div class="gCard__title">Сравнивай</div>
+          <div class="gCard__text muted">Качество, строгость, повторный выбор курса.</div>
+        </div>
+      </article>
+
+      <article class="gCard card">
+        <img class="gCard__img" src="images\cat_is_does_not_understanding_math-=(((.jpg" alt="Team" loading="lazy">
+        <div class="gCard__body">
+          <div class="gCard__title">Понимай</div>
+          <div class="gCard__text muted">Теги показывают реальный “вайб” курса.</div>
+        </div>
+      </article>
+
+      <article class="gCard card">
+        <img class="gCard__img" src="images\cat_helps_another_cat_funn.jpg" alt="Feedback" loading="lazy">
+        <div class="gCard__body">
+          <div class="gCard__title">Влияй</div>
+          <div class="gCard__text muted">Твой отзыв помогает другим студентам.</div>
+        </div>
+      </article>
     </section>
 
-    <section id="grid" class="grid"></section>
-
-    <section id="empty" class="empty card hidden">
-      <h2>Ничего не найдено</h2>
-      <p class="muted">Попробуй другой запрос или сортировку.</p>
+    <section class="ctaWide card">
+      <div>
+        <h2 class="ctaWide__title">Готов перейти в приложение?</h2>
+        <p class="ctaWide__text muted">Открывай страницу преподавателей и выбирай уверенно, у нас все анонимно</p>
+      </div>
+      <a class="btn btn--primary btn--lg" href="app.html">Перейти к преподавателям</a>
     </section>
   </main>
 
-  <!-- MODAL -->
-  <div id="modal" class="modal hidden" aria-hidden="true">
-    <div class="modal__backdrop" data-close="1"></div>
-    <div class="modal__panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-      <div class="modal__header">
-        <div>
-          <h2 id="modalTitle" class="modal__title">—</h2>
-          <div id="modalSubtitle" class="modal__subtitle muted">—</div>
-        </div>
-        <button class="iconBtn" type="button" data-close="1" aria-label="Закрыть">✕</button>
-      </div>
-
-      <div id="modalBody" class="modal__body"></div>
-
-      <div class="modal__footer">
-        <a id="modalFormLink" class="btn btn--primary" href="#" target="_blank" rel="noopener">Оставить отзыв</a>
-        <button class="btn" type="button" data-close="1">Закрыть</button>
+  <footer class="siteFooter">
+    <div class="wrap siteFooter__row">
+      <div class="muted">© No Name Students</div>
+      <div class="siteFooter__links">
+        <a class="link" href="app.html">Преподаватели</a>
       </div>
     </div>
-  </div>
+  </footer>
 
   <script src="script.js"></script>
 </body>
 </html>
-
