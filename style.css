@@ -238,6 +238,36 @@ body::after{
 .profCard{padding:14px; cursor:pointer; transition: transform .12s ease, border-color .12s ease}
 .profCard:hover{transform: translateY(-2px); border-color: color-mix(in srgb, var(--accentB) 55%, var(--line))}
 
+/* professor avatar */
+.profHead{
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+
+.profAvatar{
+  width:56px;
+  height:56px;
+  border-radius:16px;
+  flex:0 0 56px;
+  object-fit:cover;
+  border:1px solid color-mix(in srgb, var(--line) 85%, transparent);
+  background: color-mix(in srgb, var(--card2) 55%, transparent);
+}
+
+.profCard:hover .profAvatar{
+  transform: scale(1.2);
+  transition: transform .15s ease;
+}
+
+@media (max-width: 650px){
+  .profAvatar{
+    width:52px;
+    height:52px;
+    flex:0 0 52px;
+  }
+}
+
 .profTop{display:flex; justify-content:space-between; gap:10px; align-items:flex-start}
 .profName{margin:0; font-size:16px; font-weight:900}
 .badge{

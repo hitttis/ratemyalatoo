@@ -7,6 +7,17 @@ const REPORT_URL = "https://forms.gle/beKtbsgbV8Rxr9jg7";
 
 const $ = (id) => document.getElementById(id);
 
+const IMAGES_BASE = "images/professors/";
+const DEFAULT_IMAGES = [
+  "images/defaults/default1.jpg",
+  "images/defaults/default2.jpg",
+  "images/defaults/default3.jpg",
+  "images/defaults/default4.jpg",
+  "images/defaults/default5.jpg",
+  "images/defaults/default6.jpg",
+];
+const IMAGE_EXT = "jpg";
+
 function hideLoadingAfter2s() {
   const loading = $("loading");
   if (!loading) return;
@@ -68,6 +79,36 @@ function initTheme(){
 
 /* ===================== PROFESSORS APP ===================== */
 const appState = { rows: [], agg: [], query: "", sort: "quality_desc" };
+
+function slugifyName(name){
+  return (name || "")
+    .toLowerCase()
+    .trim()
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+function hashString(str){
+  let h = 0;
+  for (let i = 0; i < str.length; i++) {
+    h = (h << 5) - h + str.charCodeAt(i);
+    h |= 0;
+  }
+  return Math.abs(h);
+}
+
+function defaultAvatarFor(name){
+  const h = hashString(name || "");
+  return DEFAULT_IMAGES[h % DEFAULT_IMAGES.length];
+}
+
+function professorImageUrl(name){
+  const slug = slugifyName(name);
+  if (!slug) return defaultAvatarFor(name);
+  return `${IMAGES_BASE}${slug}.${IMAGE_EXT}`;
+}
 
 function norm(s){ return (s ?? "").toString().trim(); }
 function toNumber(x){
@@ -242,32 +283,62 @@ function render(){
     card.tabIndex = 0;
 
     card.innerHTML = `
-      <div class="profTop">
+    <div class="profTop">
+      <div class="profHead">
+        <img
+          class="profAvatar"
+          src="${professorImageUrl(a.prof)}"
+          alt="${escapeHtml(a.prof)}"
+          loading="lazy"
+          onerror="this.onerror=null; this.src='${defaultAvatarFor(a.prof)}'"
+        />
         <div>
           <p class="profName">${escapeHtml(a.prof)}</p>
-          <p class="muted" style="margin:6px 0 0 0">Отзывов: ${a.count}</p>
-        </div>
-        <span class="badge">Снова бы взяли: ${againText}</span>
-      </div>
-
-      <div class="kpis">
-        <div class="kpi">
-          <div class="kpi__label">Общее качество</div>
-          <div class="kpi__value ${sc.textClass}">
-            <span class="scoreDot ${sc.dotClass}"></span>${fmt1(a.avgQ)} / 5
-          </div>
-          <div class="kpi__sub">оценок: ${a.qN}</div>
-        </div>
-
-        <div class="kpi">
-          <div class="kpi__label">Строгость</div>
-          <div class="kpi__value">${fmt1(a.avgS)} / 5</div>
-          <div class="kpi__sub">оценок: ${a.sN}</div>
+          <p class="muted" style="margin:6px 0 0 0">
+            Отзывов: ${a.count}
+          </p>
         </div>
       </div>
 
-      <div class="pills">${tagsHtml}</div>
-    `;
+      <span class="badge">
+        Снова бы взяли: ${againText}
+      </span>
+    </div>
+
+    <div class="kpis">
+      <div class="kpi">
+        <div class="kpi__label">Общее качество</div>
+        <div class="kpi__value ${sc.textClass}">
+          <span class="scoreDot ${sc.dotClass}"></span>
+          ${fmt1(a.avgQ)} / 5
+        </div>
+        <div class="kpi__sub">оценок: ${a.qN}</div>
+      </div>
+
+      <div class="kpi">
+        <div class="kpi__label">Строгость</div>
+        <div class="kpi__value">
+          ${fmt1(a.avgS)} / 5
+        </div>
+        <div class="kpi__sub">оценок: ${a.sN}</div>
+      </div>
+    </div>
+
+    <div class="pills">
+      ${
+        a.topTags.length
+          ? a.topTags
+              .map(
+                (t) =>
+                  `<span class="pill"><strong>${escapeHtml(
+                    t.k
+                  )}</strong> · ${t.v}</span>`
+              )
+              .join("")
+          : `<span class="pill">Без тегов</span>`
+      }
+    </div>
+`;
 
     card.addEventListener("click", () => openModal(a));
     card.addEventListener("keydown", (e) => {
