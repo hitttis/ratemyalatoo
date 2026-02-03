@@ -1,11 +1,10 @@
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org">
   <url>
-    <loc>https://ratemyalatoo.xyz/</loc>
+    <loc>https://ratemyalatoo.xyz</loc>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://ratemyalatoo.xyz</loc> <!-- Добавлено // -->
-    <lastmod>2026-02-02</lastmod>
-    <priority>0.90</priority>
+    <loc>https://ratemyalatoo.xyz/favicon.ico</loc>
+    <priority>0.8</priority>
   </url>
 </urlset>
