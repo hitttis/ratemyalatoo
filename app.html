@@ -1,16 +1,15 @@
 <!doctype html>
 <html lang="ru" data-theme="dark">
 <head>
-  <link rel="icon" href="/favicon.ico" sizes="96x96">
-  <link rel="icon" href="/favicon.png" sizes="192x192" type="image/png">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Rate my Ala-Too</title>
+  <link rel="icon" href="favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="favicon.png">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <!-- LOADING SCREEN -->
   <div id="loading" class="loading">
     <img src="loading.gif" alt="Loading" class="loading__gif" />
     <div class="loading__text">LOADING</div>
@@ -32,7 +31,7 @@
           <span class="iconToggle__text" id="themeLabel">Тёмная</span>
         </button>
 
-        <a id="reportLink" class="btn" href="#" target="_blank" rel="noopener">Report</a>
+        <a id="reportLink" class="btn" href="#" target="_blank" rel="noopener">Report (на сайт)</a>
         <a id="formLink" class="btn btn--primary" href="#" target="_blank" rel="noopener">Оставить отзыв</a>
       </div>
     </div>
@@ -73,7 +72,7 @@
 
     <section id="status" class="status card">
       <div class="status__title">Загрузка…</div>
-      <div class="status__text">Загружается информация</div>
+      <div class="status__text">Список появится автоматически.</div>
     </section>
 
     <section id="grid" class="grid"></section>
@@ -86,6 +85,7 @@
     <div id="leave-review" style="height:1px;"></div>
   </main>
 
+  <!-- MODAL -->
   <div id="modal" class="modal hidden" aria-hidden="true">
     <div class="modal__backdrop" data-close="1"></div>
     <div class="modal__panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
@@ -108,10 +108,10 @@
 
   <footer class="siteFooter">
     <div class="wrap siteFooter__row">
-      <div class="muted">© No Name Students</div>
+      <div class="muted">© Created Students For Students</div>
       <div class="siteFooter__links">
         <a class="link" href="index.html">Главная</a>
-        <a class="link" href="https://forms.gle/beKtbsgbV8Rxr9jg7" target="_blank" rel="noopener">Report</a>
+        <a class="link" href="app.html">Преподаватели</a>
       </div>
     </div>
   </footer>

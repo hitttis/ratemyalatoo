@@ -1,12 +1,11 @@
-
+/* ===================== LINKS ===================== */
 const SHEET_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vThepfVPAV7nRGgU6vKdxlN7pBOiNFuQM9MwVVRyEmFVFgbHsW3KpjvlpVXsT65mLijkPVGa7JZqrc_/pub?gid=507475385&single=true&output=csv";
 
 const FORM_URL = "https://forms.gle/3GgeJSzXh2sK1rHJ9";
 const REPORT_URL = "https://forms.gle/beKtbsgbV8Rxr9jg7";
 
-const $ = (id) => document.getElementById(id);
-
+/* ===================== AVATARS ===================== */
 const IMAGES_BASE = "images/professors/";
 const DEFAULT_IMAGES = [
   "images/defaults/default1.jpg",
@@ -16,17 +15,84 @@ const DEFAULT_IMAGES = [
   "images/defaults/default5.jpg",
   "images/defaults/default6.jpg",
 ];
-const IMAGE_EXT = "jpg";
+const IMAGE_EXT = "png";
+
+/* ===================== HELPERS ===================== */
+const $ = (id) => document.getElementById(id);
 
 function hideLoadingAfter2s() {
   const loading = $("loading");
   if (!loading) return;
-  setTimeout(() => {
-    loading.style.display = "none";
-  }, 1250);
+  setTimeout(() => { loading.style.display = "none"; }, 1250);
 }
 
-const THEME_KEY = "site_theme_v2";
+function slugifyName(name){
+  return (name || "")
+    .toLowerCase()
+    .trim()
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+function hashString(str){
+  let h = 0;
+  for (let i = 0; i < str.length; i++) {
+    h = (h << 5) - h + str.charCodeAt(i);
+    h |= 0;
+  }
+  return Math.abs(h);
+}
+
+function defaultAvatarFor(name){
+  const h = hashString(name || "");
+  return DEFAULT_IMAGES[h % DEFAULT_IMAGES.length];
+}
+
+function customAvatarUrl(name){
+  const slug = slugifyName(name);
+  if (!slug) return null;
+  return `${IMAGES_BASE}${slug}.${IMAGE_EXT}`;
+}
+
+function verifiedIconSvg(){
+  return `
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M20 7.5 10.5 17 7 13.5"
+        stroke="currentColor" stroke-width="2.5"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  `;
+}
+
+function norm(s){ return (s ?? "").toString().trim(); }
+function toNumber(x){
+  const n = Number(String(x ?? "").replace(",", "."));
+  return Number.isFinite(n) ? n : null;
+}
+function fmt1(n){
+  if (n == null) return "—";
+  return (Math.round(n * 10) / 10).toFixed(1);
+}
+function escapeHtml(s){
+  return String(s ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function scoreClass(avg){
+  if (avg == null) return {textClass:"score--mid", dotClass:"dot--mid"};
+  if (avg >= 4.0) return {textClass:"score--good", dotClass:"dot--good"};
+  if (avg >= 2.5) return {textClass:"score--mid", dotClass:"dot--mid"};
+  return {textClass:"score--bad", dotClass:"dot--bad"};
+}
+
+/* ===================== THEME ===================== */
+const THEME_KEY = "site_theme_v3";
 
 function iconSun(){
   return `
@@ -74,66 +140,15 @@ function initTheme(){
     });
   }
 }
-/* ===================== END THEME ===================== */
 
-
-/* ===================== PROFESSORS APP ===================== */
-const appState = { rows: [], agg: [], query: "", sort: "quality_desc" };
-
-function slugifyName(name){
-  return (name || "")
-    .toLowerCase()
-    .trim()
-    .replace(/&/g, "and")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "");
-}
-
-function hashString(str){
-  let h = 0;
-  for (let i = 0; i < str.length; i++) {
-    h = (h << 5) - h + str.charCodeAt(i);
-    h |= 0;
-  }
-  return Math.abs(h);
-}
-
-function defaultAvatarFor(name){
-  const h = hashString(name || "");
-  return DEFAULT_IMAGES[h % DEFAULT_IMAGES.length];
-}
-
-function professorImageUrl(name){
-  const slug = slugifyName(name);
-  if (!slug) return defaultAvatarFor(name);
-  return `${IMAGES_BASE}${slug}.${IMAGE_EXT}`;
-}
-
-function norm(s){ return (s ?? "").toString().trim(); }
-function toNumber(x){
-  const n = Number(String(x ?? "").replace(",", "."));
-  return Number.isFinite(n) ? n : null;
-}
-function fmt1(n){
-  if (n == null) return "—";
-  return (Math.round(n * 10) / 10).toFixed(1);
-}
-function escapeHtml(s){
-  return String(s ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
+/* ===================== CSV PARSE ===================== */
 function detectDelimiter(text){
   const head = text.split(/\r?\n/).find(l => l.trim().length) || "";
   const commas = (head.match(/,/g) || []).length;
   const tabs = (head.match(/\t/g) || []).length;
   return tabs > commas ? "\t" : ",";
 }
+
 function parseDelimited(text, delimiter){
   const rows = [];
   let cur = [];
@@ -165,6 +180,7 @@ function parseDelimited(text, delimiter){
 
   return rows.filter(r => r.some(c => String(c ?? "").trim() !== ""));
 }
+
 function toObjects(grid){
   if (!grid.length) return [];
   const headers = grid[0].map(h => norm(h));
@@ -178,14 +194,10 @@ function toObjects(grid){
   }
   return out;
 }
+
+/* ===================== AGGREGATION ===================== */
 function mapInc(map, key){ if (!key) return; map.set(key, (map.get(key) || 0) + 1); }
 function topN(map, n){ return [...map.entries()].sort((a,b)=>b[1]-a[1]).slice(0,n).map(([k,v])=>({k,v})); }
-function scoreClass(avg){
-  if (avg == null) return {textClass:"score--mid", dotClass:"dot--mid"};
-  if (avg >= 4.0) return {textClass:"score--good", dotClass:"dot--good"};
-  if (avg >= 2.5) return {textClass:"score--mid", dotClass:"dot--mid"};
-  return {textClass:"score--bad", dotClass:"dot--bad"};
-}
 
 function aggregate(rows){
   const by = new Map();
@@ -202,8 +214,14 @@ function aggregate(rows){
     const tagRaw = norm(r["Выберите тег который близко описывает преподавателя"]);
 
     if (!by.has(prof)){
-      by.set(prof, { prof, count:0, sumQ:0, qN:0, sumS:0, sN:0, againYes:0, againN:0,
-        attendance:new Map(), grades:new Map(), tags:new Map()
+      by.set(prof, {
+        prof, count:0,
+        sumQ:0, qN:0,
+        sumS:0, sN:0,
+        againYes:0, againN:0,
+        attendance:new Map(),
+        grades:new Map(),
+        tags:new Map(),
       });
     }
 
@@ -236,6 +254,9 @@ function aggregate(rows){
   }));
 }
 
+/* ===================== APP STATE ===================== */
+const appState = { rows: [], agg: [], query: "", sort: "quality_desc" };
+
 function applyFilters(){
   let arr = appState.agg.slice();
   const q = appState.query.trim().toLowerCase();
@@ -255,100 +276,7 @@ function applyFilters(){
   return arr;
 }
 
-function render(){
-  const grid = $("grid");
-  const empty = $("empty");
-  const status = $("status");
-  if (!grid) return;
-
-  const arr = applyFilters();
-  grid.innerHTML = "";
-  if (status) status.classList.add("hidden");
-
-  if (!arr.length){
-    empty.classList.remove("hidden");
-    return;
-  }
-  empty.classList.add("hidden");
-
-  for (const a of arr){
-    const sc = scoreClass(a.avgQ);
-    const againText = (a.againN > 0) ? `${Math.round((a.againYes / a.againN) * 100)}%` : "—";
-    const tagsHtml = a.topTags.length
-      ? a.topTags.map(t => `<span class="pill"><strong>${escapeHtml(t.k)}</strong> · ${t.v}</span>`).join("")
-      : `<span class="pill">Без тегов</span>`;
-
-    const card = document.createElement("article");
-    card.className = "profCard card";
-    card.tabIndex = 0;
-
-    card.innerHTML = `
-    <div class="profTop">
-      <div class="profHead">
-        <img
-          class="profAvatar"
-          src="${professorImageUrl(a.prof)}"
-          alt="${escapeHtml(a.prof)}"
-          loading="lazy"
-          onerror="this.onerror=null; this.src='${defaultAvatarFor(a.prof)}'"
-        />
-        <div>
-          <p class="profName">${escapeHtml(a.prof)}</p>
-          <p class="muted" style="margin:6px 0 0 0">
-            Отзывов: ${a.count}
-          </p>
-        </div>
-      </div>
-
-      <span class="badge">
-        Снова бы взяли: ${againText}
-      </span>
-    </div>
-
-    <div class="kpis">
-      <div class="kpi">
-        <div class="kpi__label">Общее качество</div>
-        <div class="kpi__value ${sc.textClass}">
-          <span class="scoreDot ${sc.dotClass}"></span>
-          ${fmt1(a.avgQ)} / 5
-        </div>
-        <div class="kpi__sub">оценок: ${a.qN}</div>
-      </div>
-
-      <div class="kpi">
-        <div class="kpi__label">Строгость</div>
-        <div class="kpi__value">
-          ${fmt1(a.avgS)} / 5
-        </div>
-        <div class="kpi__sub">оценок: ${a.sN}</div>
-      </div>
-    </div>
-
-    <div class="pills">
-      ${
-        a.topTags.length
-          ? a.topTags
-              .map(
-                (t) =>
-                  `<span class="pill"><strong>${escapeHtml(
-                    t.k
-                  )}</strong> · ${t.v}</span>`
-              )
-              .join("")
-          : `<span class="pill">Без тегов</span>`
-      }
-    </div>
-`;
-
-    card.addEventListener("click", () => openModal(a));
-    card.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") openModal(a);
-    });
-
-    grid.appendChild(card);
-  }
-}
-
+/* ===================== MODAL ===================== */
 function renderMiniTable(rows, h1, h2){
   if (!rows.length) return `<div class="muted">Нет данных</div>`;
   const tr = rows.map(r => `<tr><td>${escapeHtml(r.k)}</td><td>${r.v}</td></tr>`).join("");
@@ -411,8 +339,108 @@ function closeModal(){
   modal.setAttribute("aria-hidden", "true");
 }
 
+/* ===================== RENDER ===================== */
+function render(){
+  const grid = $("grid");
+  const empty = $("empty");
+  const status = $("status");
+  if (!grid) return;
+
+  const arr = applyFilters();
+  grid.innerHTML = "";
+  if (status) status.classList.add("hidden");
+
+  if (!arr.length){
+    empty.classList.remove("hidden");
+    return;
+  }
+  empty.classList.add("hidden");
+
+  for (const a of arr){
+    const sc = scoreClass(a.avgQ);
+    const againText = (a.againN > 0) ? `${Math.round((a.againYes / a.againN) * 100)}%` : "—";
+
+    const card = document.createElement("article");
+    card.className = "profCard card";
+    card.tabIndex = 0;
+
+    // IMPORTANT: по умолчанию ставим дефолт и НЕ verified.
+    const fallback = defaultAvatarFor(a.prof);
+    const tryCustom = customAvatarUrl(a.prof);
+
+    const tagsHtml = a.topTags.length
+      ? a.topTags.map(t => `<span class="pill"><strong>${escapeHtml(t.k)}</strong> · ${t.v}</span>`).join("")
+      : `<span class="pill">Без тегов</span>`;
+
+    card.innerHTML = `
+      <div class="profTop">
+        <div class="profHead">
+          <img class="profAvatar" data-avatar="1" src="${fallback}" alt="${escapeHtml(a.prof)}" loading="lazy" />
+          <div>
+            <div class="profNameRow">
+              <p class="profName">${escapeHtml(a.prof)}</p>
+              <span class="verifiedBadge hidden" data-verified="1" title="Верифицировано">
+                ${verifiedIconSvg()}
+              </span>
+            </div>
+            <p class="muted" style="margin:6px 0 0 0">Отзывов: ${a.count}</p>
+          </div>
+        </div>
+
+        <span class="badge">Снова бы взяли: ${againText}</span>
+      </div>
+
+      <div class="kpis">
+        <div class="kpi">
+          <div class="kpi__label">Общее качество</div>
+          <div class="kpi__value ${sc.textClass}">
+            <span class="scoreDot ${sc.dotClass}"></span>${fmt1(a.avgQ)} / 5
+          </div>
+          <div class="kpi__sub">оценок: ${a.qN}</div>
+        </div>
+
+        <div class="kpi">
+          <div class="kpi__label">Строгость</div>
+          <div class="kpi__value">${fmt1(a.avgS)} / 5</div>
+          <div class="kpi__sub">оценок: ${a.sN}</div>
+        </div>
+      </div>
+
+      <div class="pills">${tagsHtml}</div>
+    `;
+
+    // Click to open modal
+    card.addEventListener("click", () => openModal(a));
+    card.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") openModal(a);
+    });
+
+    // Try load custom avatar:
+    const img = card.querySelector('[data-avatar="1"]');
+    const badge = card.querySelector('[data-verified="1"]');
+
+    if (tryCustom && img){
+      const test = new Image();
+      test.onload = () => {
+        img.src = tryCustom;
+        img.classList.add("profAvatar--verified");
+        if (badge) badge.classList.remove("hidden");
+      };
+      test.onerror = () => {
+        // stay on default, no verified
+      };
+      test.src = tryCustom;
+    } else {
+      // no custom path -> keep default
+      if (badge) badge.classList.add("hidden");
+    }
+
+    grid.appendChild(card);
+  }
+}
+
+/* ===================== LOAD ===================== */
 async function loadProfessors(){
-  // set links
   const formLink = $("formLink");
   const modalForm = $("modalFormLink");
   const reportLink = $("reportLink");
@@ -448,7 +476,7 @@ async function loadProfessors(){
     if (status){
       status.classList.remove("hidden");
       status.querySelector(".status__title").textContent = "Не удалось загрузить данные";
-      status.querySelector(".status__text").textContent = "Проверь доступ к сайту";
+      status.querySelector(".status__text").textContent = "Проверь ссылку и доступ к опубликованному листу.";
     }
     console.error(e);
   } finally {
@@ -456,8 +484,12 @@ async function loadProfessors(){
   }
 }
 
-function initProfessorsPage(){
-  if (!$("grid")) return; 
+/* ===================== INIT ===================== */
+function initApp(){
+  initTheme();
+
+  const grid = $("grid");
+  if (!grid) { hideLoadingAfter2s(); return; }
 
   $("searchInput").addEventListener("input", (e) => {
     appState.query = e.target.value || "";
@@ -484,9 +516,4 @@ function initProfessorsPage(){
   loadProfessors();
 }
 
-/* ===================== INIT ===================== */
-initTheme();
-initProfessorsPage();
-// On landing page we still hide loader after 2s
-hideLoadingAfter2s();
-window.closeModal = closeModal;
+initApp();

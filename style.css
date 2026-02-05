@@ -7,8 +7,8 @@ html[data-theme="dark"]{
   --card2:#0A1020;
   --line:#1A2550;
 
-  --accentA:#7C3AED; /* violet */
-  --accentB:#22D3EE; /* cyan */
+  --accentA:#7C3AED;
+  --accentB:#22D3EE;
 
   --good:#34D399;
   --mid:#FBBF24;
@@ -25,8 +25,9 @@ html[data-theme="light"]{
   --card2:#F3F5FB;
   --line:#E2E8F0;
 
-  --accentA:#6D28D9; /* violet */
-  --accentB:#0891B2; /* cyan */
+  /* менее ярко */
+  --accentA:#5B21B6;
+  --accentB:#0E7490;
 
   --good:#16A34A;
   --mid:#D97706;
@@ -40,7 +41,7 @@ html[data-theme="light"]{
 *{box-sizing:border-box}
 html,body{height:100%}
 
-/* NEW BACKGROUND: smooth linear + subtle grid/noise (no radial gradients) */
+/* Background: smooth + subtle grid/noise */
 body{
   margin:0;
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans";
@@ -54,21 +55,18 @@ body{
   position: relative;
 }
 
-/* subtle grid overlay */
 body::before{
   content:"";
   position:fixed;
   inset:0;
   pointer-events:none;
-  opacity:.18;
+  opacity:.16;
   background-image:
     linear-gradient(to right, rgba(255,255,255,.08) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255,255,255,.06) 1px, transparent 1px);
   background-size: 56px 56px;
   mix-blend-mode: overlay;
 }
-
-/* subtle noise overlay */
 body::after{
   content:"";
   position:fixed;
@@ -80,11 +78,10 @@ body::after{
   mix-blend-mode: overlay;
 }
 
-/* Mobile: remove overlays to avoid weird bottom bars */
+/* Mobile: remove overlays */
 @media (max-width: 768px){
-  body{ background: var(--bg); }
+  body{ background: var(--bg); min-height: 100dvh; }
   body::before, body::after{ display:none; }
-  body{ min-height: 100dvh; }
 }
 
 .wrap{max-width:1100px; margin:0 auto; padding:18px}
@@ -160,7 +157,7 @@ body::after{
 .btn--ghost{ background: transparent; }
 .btn--lg{ padding:12px 14px; border-radius:16px }
 
-/* ===================== THEME TOGGLE (SVG icons) ===================== */
+/* ===================== THEME TOGGLE ===================== */
 .iconToggle{
   border:1px solid color-mix(in srgb, var(--line) 90%, transparent);
   background: linear-gradient(180deg,
@@ -238,38 +235,27 @@ body::after{
 .profCard{padding:14px; cursor:pointer; transition: transform .12s ease, border-color .12s ease}
 .profCard:hover{transform: translateY(-2px); border-color: color-mix(in srgb, var(--accentB) 55%, var(--line))}
 
-/* professor avatar */
-.profHead{
-  display:flex;
-  gap:12px;
-  align-items:center;
-}
+.profTop{display:flex; justify-content:space-between; gap:10px; align-items:flex-start}
+
+.profHead{display:flex; gap:12px; align-items:center}
 
 .profAvatar{
-  width:56px;
-  height:56px;
+  width:100px;
+  height:100px;
   border-radius:16px;
   flex:0 0 56px;
   object-fit:cover;
   border:1px solid color-mix(in srgb, var(--line) 85%, transparent);
   background: color-mix(in srgb, var(--card2) 55%, transparent);
 }
-
-.profCard:hover .profAvatar{
-  transform: scale(1.2);
-  transition: transform .15s ease;
-}
-
 @media (max-width: 650px){
-  .profAvatar{
-    width:52px;
-    height:52px;
-    flex:0 0 52px;
-  }
+  .profAvatar{ width:80px; height:80px; flex:0 0 52px; }
 }
 
-.profTop{display:flex; justify-content:space-between; gap:10px; align-items:flex-start}
 .profName{margin:0; font-size:16px; font-weight:900}
+
+.profNameRow{display:flex; align-items:center; gap:8px}
+
 .badge{
   font-size:12px;
   padding:6px 10px;
@@ -277,6 +263,37 @@ body::after{
   border:1px solid color-mix(in srgb, var(--line) 90%, transparent);
   background: color-mix(in srgb, var(--card2) 55%, transparent);
   white-space:nowrap;
+}
+
+/* Verified badge (check) */
+.verifiedBadge{
+  width:18px;
+  height:18px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:999px;
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--accentB) 40%, transparent),
+    color-mix(in srgb, var(--accentA) 35%, transparent)
+  );
+  border:1px solid color-mix(in srgb, var(--line) 80%, transparent);
+  box-shadow: 0 8px 18px rgba(0,0,0,.18);
+  flex:0 0 18px;
+}
+.verifiedBadge svg{ width:12px; height:12px; color:var(--text); opacity:.95 }
+
+/* Verified avatar frame: заметная, но не неон */
+.profAvatar--verified{
+  border: 2.5px solid color-mix(in srgb, var(--accentB) 70%, var(--accentA));
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--accentA) 22%, transparent),
+    0 6px 18px rgba(0,0,0,.25);
+}
+html[data-theme="light"] .profAvatar--verified{
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--accentA) 16%, transparent),
+    0 6px 14px rgba(16,24,40,.10);
 }
 
 .kpis{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px}
@@ -368,111 +385,6 @@ body::after{
   background: color-mix(in srgb, var(--card2) 55%, transparent);
 }
 .table tr:last-child td{border-bottom:none}
-
-/* ===================== LANDING ===================== */
-.landingHero{
-  margin-top:16px;
-  padding:18px;
-  display:grid;
-  grid-template-columns: 1.2fr .8fr;
-  gap:16px;
-}
-@media (max-width: 900px){ .landingHero{grid-template-columns:1fr} }
-
-.pillTop{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  padding:8px 10px;
-  border-radius:999px;
-  border:1px solid color-mix(in srgb, var(--line) 85%, transparent);
-  background: color-mix(in srgb, var(--card2) 55%, transparent);
-  font-size:12px;
-  font-weight:900;
-}
-
-.landingHero__title{
-  font-size:40px;
-  line-height:1.05;
-  margin:12px 0 10px 0;
-  letter-spacing:-.5px;
-}
-@media (max-width: 650px){ .landingHero__title{font-size:32px} }
-
-.landingHero__text{margin:0; font-size:15px; max-width:60ch}
-
-.landingHero__cta{display:flex; gap:10px; flex-wrap:wrap; margin-top:16px}
-
-.landingHero__mini{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:10px;
-  margin-top:18px;
-}
-.miniItem{
-  border-radius:16px;
-  border:1px solid color-mix(in srgb, var(--line) 85%, transparent);
-  background: color-mix(in srgb, var(--card2) 55%, transparent);
-  padding:12px;
-}
-.miniItem__title{font-weight:900}
-.miniItem__text{margin-top:6px; font-size:13px}
-
-.previewCard{
-  border-radius:20px;
-  border:1px solid color-mix(in srgb, var(--line) 90%, transparent);
-  background: color-mix(in srgb, var(--card) 92%, transparent);
-  box-shadow: var(--shadow);
-  padding:16px;
-}
-.previewCard__top{display:flex; align-items:center; justify-content:space-between; gap:12px}
-.previewBadge{
-  font-size:12px; font-weight:900;
-  padding:6px 10px; border-radius:999px;
-  border:1px solid color-mix(in srgb, var(--line) 85%, transparent);
-  background: color-mix(in srgb, var(--card2) 55%, transparent);
-}
-.previewScore{display:flex; align-items:center; gap:8px}
-.previewScore__num{font-weight:900; font-size:18px}
-
-.previewCard__name{margin-top:12px; font-weight:900; font-size:18px}
-.previewCard__sub{margin-top:4px; font-size:13px}
-
-.previewCard__chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:12px}
-.chip{
-  font-size:12px;
-  padding:6px 10px;
-  border-radius:999px;
-  border:1px solid color-mix(in srgb, var(--line) 85%, transparent);
-  background: color-mix(in srgb, var(--card2) 55%, transparent);
-}
-.previewCard__hint{margin-top:12px; font-size:12px}
-
-.landingGrid{
-  margin-top:14px;
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:14px;
-}
-@media (max-width: 900px){ .landingGrid{grid-template-columns:1fr} }
-
-.gCard{ overflow:hidden; }
-.gCard__img{ width:100%; height:170px; object-fit:cover; display:block; }
-.gCard__body{ padding:14px; }
-.gCard__title{ font-weight:900; }
-.gCard__text{ margin-top:6px; font-size:13px; }
-
-.ctaWide{
-  margin-top:14px;
-  padding:16px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  flex-wrap:wrap;
-}
-.ctaWide__title{margin:0; font-weight:900}
-.ctaWide__text{margin:6px 0 0 0; font-size:13px}
 
 /* ===================== FOOTER ===================== */
 .siteFooter{
