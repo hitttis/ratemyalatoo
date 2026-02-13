@@ -99,7 +99,7 @@ body::after{
   align-items:center;
   justify-content:center;
 }
-.loading__gif{ width:170px; height:auto; }
+.loading__gif{ width:250px; height:auto; }
 .loading__text{
   margin-top:16px;
   letter-spacing: 5px;

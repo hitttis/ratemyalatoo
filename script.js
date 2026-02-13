@@ -23,7 +23,7 @@ const $ = (id) => document.getElementById(id);
 function hideLoadingAfter2s() {
   const loading = $("loading");
   if (!loading) return;
-  setTimeout(() => { loading.style.display = "none"; }, 1250);
+  setTimeout(() => { loading.style.display = "none"; }, 1000);
 }
 
 function slugifyName(name){
