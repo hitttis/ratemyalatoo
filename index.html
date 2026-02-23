@@ -8,13 +8,12 @@
   <link rel="icon" href="favicon.ico" sizes="96x96">
   <link rel="icon" href="favicon.png" sizes="192x192" type="image/png">
   <link rel="apple-touch-icon" href="favicon.png">
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="landing.css">
-  
-  <meta name="title" content="Rate my Ala-Too — рейтинг преподавателей от студентов">
-  <meta name="description" content="Анонимный рейтинг преподавателей. Реальные отзывы студентов, оценки, строгость и полезные теги. Помогает выбрать курс. (My Alatoo, Ocs, alatoo)">
 
-  
+  <link rel="stylesheet" href="landing.css">
+
+  <meta name="title" content="Rate my Ala-Too — рейтинг преподавателей от студентов">
+  <meta name="description" content="Анонимный рейтинг преподавателей. Реальные отзывы студентов, оценки, строгость и полезные теги. Помогает выбрать курс.">
+
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -24,6 +23,7 @@
     "logo": "https://ratemyalatoo.xyz/favicon.png"
   }
   </script>
+
   <meta property="og:type" content="website">
   <meta property="og:title" content="Rate my Ala-Too — рейтинг преподавателей">
   <meta property="og:description" content="Рейтинг преподавателей.">
@@ -55,112 +55,164 @@
   </header>
 
   <main class="wrap">
-    <section class="landingHero card">
-      <div class="landingHero__left">
-        <div class="pillTop">🎓 Students-made · Быстро · Понятно</div>
-        <h1 class="landingHero__title">Выбираешь электив и сомневаешься?</h1>
-        <p class="landingHero__text muted">
-          Здесь студенты оставляют оценки о стиле курса:
-          насколько качественно, насколько строго, и какие особенности встречаются чаще всего.
-          Цель — сделать выбор курса проще и честнее.
+
+    <section class="heroFull" id="top">
+      <div class="heroFull__inner">
+        <div class="pill">Анонимно · Быстро · По делу</div>
+
+        <h1 class="heroFull__title">Выбирай электив уверенно.</h1>
+
+        <p class="heroFull__lead muted">
+          Оценки, строгость, понимающий ли препод?
         </p>
 
-        <div class="landingHero__cta">
-          <a class="btn btn--primary btn--lg" href="app.html">Открыть список преподавателей</a>
-          <a class="btn btn--ghost btn--lg" href="app.html#leave-review">Оставить отзыв</a>
+        <div class="cta">
+          <a class="btn btn--primary btn--xl" href="app.html">Открыть приложение</a>
         </div>
 
-        <div class="landingHero__mini">
-          <div class="miniItem">
-            <div class="miniItem__title">Несправедливая оценка?</div>
-            <div class="miniItem__text muted">Оставь отзыв: из-за чего получил(а)?</div>
-          </div>
-          <div class="miniItem">
-            <div class="miniItem__title">Теги</div>
-            <div class="miniItem__text muted">«много домашки», «полезный фидбек» и т.д.</div>
-          </div>
-          <div class="miniItem">
-            <div class="miniItem__title">Комментарии мы не добавим</div>
-            <div class="miniItem__text muted">Модерация у нас не так развита :(</div>
-          </div>
-          <div class="miniItem">
-            <div class="miniItem__title">Хорошее дело всегда возвращается</div>
-            <div class="miniItem__text muted">Оставь отзыв — помоги будущим студентам выбрать преподавателя</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="landingHero__right">
-        <div class="previewCard">
-          <div class="previewCard__top">
-            <span class="previewBadge">Пример карточки</span>
-            <div class="previewScore">
-              <span class="scoreDot dot--good"></span>
-              <span class="previewScore__num score--good">4.6</span>
-              <span class="muted">/ 5</span>
-            </div>
-          </div>
-
-          <div class="previewCard__name">Asanov Uson</div>
-          <div class="previewCard__sub muted">Отзывов: 27 · Снова бы взяли: 78%</div>
-
-          <div class="previewCard__chips">
-            <span class="chip">Полезный фидбек</span>
-            <span class="chip">Важна активность</span>
-            <span class="chip">Хорошее чувство юмора</span>
-          </div>
-
-          <div class="previewCard__hint muted">
-            Нажми «Открыть список преподавателей», чтобы посмотреть реальные рейтинги.
-          </div>
-        </div>
+        <a class="scrollHint muted" href="#after-hero" aria-label="Прокрутить вниз">
+          <span class="scrollHint__dot" aria-hidden="true"></span>
+          Листай вниз
+        </a>
       </div>
     </section>
 
-    <section class="landingGrid">
-      <article class="gCard card">
-        <img class="gCard__img" src="images/cat_is_watching-alatoo.jpg" alt="Study" loading="lazy">
-        <div class="gCard__body">
-          <div class="gCard__title">Сравнивай</div>
-          <div class="gCard__text muted">Качество, строгость, повторный выбор курса.</div>
+    <div id="after-hero"></div>
+
+    <section class="grid3" aria-label="Ключевые преимущества">
+      <article class="card imgCard">
+        <img class="imgCard__img" src="images/cat_is_watching-alatoo.jpg" alt="Сравнивай" loading="lazy">
+        <div class="imgCard__body">
+          <div class="imgCard__title">Сравнивай</div>
+          <div class="imgCard__text muted">Качество, строгость, повторный выбор.</div>
         </div>
       </article>
 
-      <article class="gCard card">
-        <img class="gCard__img" src="images/cat_is_does_not_understanding_math-=(((.jpg" alt="Team" loading="lazy">
-        <div class="gCard__body">
-          <div class="gCard__title">Понимай</div>
-          <div class="gCard__text muted">Теги показывают реальный «вайб» курса.</div>
+      <article class="card imgCard">
+        <img class="imgCard__img" src="images/cat_is_does_not_understanding_math-=(((.jpg" alt="Понимай" loading="lazy">
+        <div class="imgCard__body">
+          <div class="imgCard__title">Понимай</div>
+          <div class="imgCard__text muted">Теги показывают реальность курса.</div>
         </div>
       </article>
 
-      <article class="gCard card">
-        <img class="gCard__img" src="images/cat_helps_another_cat_funn.jpg" alt="Feedback" loading="lazy">
-        <div class="gCard__body">
-          <div class="gCard__title">Влияй</div>
-          <div class="gCard__text muted">Твой отзыв помогает другим студентам.</div>
+      <article class="card imgCard">
+        <img class="imgCard__img" src="images/cat_helps_another_cat_funn.jpg" alt="Влияй" loading="lazy">
+        <div class="imgCard__body">
+          <div class="imgCard__title">Делай выбор</div>
+          <div class="imgCard__text muted">Меньше сомнений — больше ясности.</div>
         </div>
       </article>
     </section>
 
-    <section class="ctaWide card">
+    <section class="card sampleWrap" aria-label="Пример карточки преподавателя">
+      <div class="sample">
+        <div class="sample__top">
+          <span class="badge">Пример карточки</span>
+          <div class="score" aria-label="Рейтинг 4.6 из 5">
+            <span class="dot" aria-hidden="true"></span>
+            <span class="score__num">4.6</span>
+            <span class="muted">/ 5</span>
+          </div>
+        </div>
+
+        <div class="sample__name">Asanov Uson</div>
+        <div class="sample__meta muted">Отзывов: 27 · Снова бы взяли: 78%</div>
+
+        <div class="chips" aria-label="Теги">
+          <span class="chip">Полезный фидбек</span>
+          <span class="chip">Домашка есть</span>
+          <span class="chip">Справедливо</span>
+        </div>
+
+        <div class="note muted">
+          В приложении можно фильтровать и сравнивать преподавателей.
+        </div>
+      </div>
+    </section>
+
+    <section class="card faq" aria-label="FAQ">
+      <div class="faq__head">
+        <h2 class="h2">FAQ</h2>
+        <p class="muted small">Нажми на вопрос — откроется ответ.</p>
+      </div>
+
+      <details class="faqItem" open>
+        <summary class="faqQ">
+          <span>Это анонимно?</span>
+          <span class="chev" aria-hidden="true">⌄</span>
+        </summary>
+        <div class="faqA muted">Да. Без аккаунта и без личных данных.</div>
+      </details>
+
+      <details class="faqItem">
+        <summary class="faqQ">
+          <span>Что именно оценивается?</span>
+          <span class="chev" aria-hidden="true">⌄</span>
+        </summary>
+        <div class="faqA muted">Качество курса, строгость и полезные теги о преподе</div>
+      </details>
+
+      <details class="faqItem">
+        <summary class="faqQ">
+          <span>Почему нет комментариев?</span>
+          <span class="chev" aria-hidden="true">⌄</span>
+        </summary>
+        <div class="faqA muted">Ответ прост, у нас нет модерации. Не думаю что добавим модерцию!</div>
+      </details>
+
+      <details class="faqItem">
+        <summary class="faqQ">
+          <span>Можно ли одним отзывом “сломать” рейтинг?</span>
+          <span class="chev" aria-hidden="true">⌄</span>
+        </summary>
+        <div class="faqA muted">Нет. Итоговые значения сглаживают единичные выбросы. Удаляем спам отзывы, так что отзывы являются реальными отзывами!</div>
+      </details>
+    </section>
+
+    <section class="card endCta" aria-label="Переход в приложение">
       <div>
-        <h2 class="ctaWide__title">Готов перейти в приложение?</h2>
-        <p class="ctaWide__text muted">Открывай страницу преподавателей и выбирай уверенно — у нас всё анонимно.</p>
+        <div class="endCta__title">Готов перейти?</div>
+        <div class="muted small">Открой преподавателей и выбери уверенно.</div>
       </div>
       <a class="btn btn--primary btn--lg" href="app.html">Перейти к преподавателям</a>
     </section>
+
   </main>
 
-  <footer class="siteFooter">
-    <div class="wrap siteFooter__row">
+  <footer class="footer">
+    <div class="wrap footer__row">
       <div class="muted">© No Name Students</div>
-      <div class="siteFooter__links">
+      <div class="footer__links">
+        <a class="link" href="#top">Наверх</a>
         <a class="link" href="app.html">Преподаватели</a>
       </div>
     </div>
   </footer>
 
-  <script src="script.js"></script>
+  <!-- Theme toggle (мини и автономно, чтобы не зависеть от твоего script.js) -->
+  <script>
+    (function(){
+      const root = document.documentElement;
+      const btn = document.getElementById('themeToggle');
+      const label = document.getElementById('themeLabel');
+      const icon = document.getElementById('themeIcon');
+
+      function apply(theme){
+        root.setAttribute('data-theme', theme);
+        try { localStorage.setItem('theme', theme); } catch(e){}
+        if(label) label.textContent = theme === 'light' ? 'Светлая' : 'Тёмная';
+        if(icon) icon.textContent = theme === 'light' ? '☀️' : '🌙';
+      }
+
+      const saved = (()=>{ try { return localStorage.getItem('theme'); } catch(e){ return null; }})();
+      apply(saved || root.getAttribute('data-theme') || 'dark');
+
+      btn && btn.addEventListener('click', () => {
+        const cur = root.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+        apply(cur === 'light' ? 'dark' : 'light');
+      });
+    })();
+  </script>
 </body>
 </html>
