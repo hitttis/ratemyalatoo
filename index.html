@@ -3,32 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-
   <title>Rate my Ala-Too</title>
+
   <link rel="icon" href="favicon.ico" sizes="96x96">
   <link rel="icon" href="favicon.png" sizes="192x192" type="image/png">
   <link rel="apple-touch-icon" href="favicon.png">
 
   <link rel="stylesheet" href="landing.css">
-
-  <meta name="title" content="Rate my Ala-Too — рейтинг преподавателей от студентов">
   <meta name="description" content="Анонимный рейтинг преподавателей. Реальные отзывы студентов, оценки, строгость и полезные теги. Помогает выбрать курс.">
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "Rate my Ala-Too",
-    "url": "https://ratemyalatoo.xyz",
-    "logo": "https://ratemyalatoo.xyz/favicon.png"
-  }
-  </script>
-
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Rate my Ala-Too — рейтинг преподавателей">
-  <meta property="og:description" content="Рейтинг преподавателей.">
-  <meta property="og:url" content="https://ratemyalatoo.xyz">
-  <meta property="og:image" content="https://ratemyalatoo.xyz/preview.png">
 </head>
 
 <body>
@@ -43,41 +25,65 @@
         </div>
       </a>
 
-      <div class="topbar__actions">
-        <button class="iconToggle" id="themeToggle" type="button" aria-label="Сменить тему" title="Сменить тему">
-          <span class="iconToggle__icon" aria-hidden="true" id="themeIcon"></span>
-          <span class="iconToggle__text" id="themeLabel">Тёмная</span>
+      <div class="topbar__actions topbar__actions--desktop">
+        <button class="iconToggle" id="themeToggleDesktop" type="button" aria-label="Сменить тему" title="Сменить тему">
+          <span class="iconToggle__icon" aria-hidden="true" id="themeIconDesktop"></span>
+          <span class="iconToggle__text" id="themeLabelDesktop">Тёмная</span>
         </button>
-
         <a class="btn btn--primary" href="app.html">Перейти к преподавателям</a>
       </div>
+
+      <button class="mMenuBtn" id="mMenuBtn" type="button"
+              aria-label="Открыть меню" aria-expanded="false" aria-controls="mMenu">
+        <span class="mMenuBtn__icon" aria-hidden="true">☰</span>
+      </button>
     </div>
   </header>
 
+  <div class="mOverlay" id="mOverlay" hidden></div>
+
+  <aside class="mMenu" id="mMenu" hidden aria-label="Мобильное меню">
+    <div class="mMenu__head">
+      <div class="mMenu__brand">
+        <div class="mMenu__title">Rate my Ala-Too</div>
+        <div class="mMenu__sub muted">Рейтинги преподавателей</div>
+      </div>
+      <button class="mClose" id="mClose" type="button" aria-label="Закрыть меню">✕</button>
+    </div>
+
+    <div class="mMenu__body">
+      <a class="btn btn--primary btn--block" href="app.html">Перейти к преподавателям</a>
+
+      <button class="btn btn--ghost btn--block" id="themeToggleMobile" type="button" aria-label="Сменить тему">
+        <span id="themeIconMobile" aria-hidden="true"></span>
+        <span id="themeLabelMobile">Тёмная</span>
+      </button>
+
+      <a class="mLink" href="#content" id="mGoContent">Смотреть ниже</a>
+      <a class="mLink" href="#faq">FAQ</a>
+      <a class="mLink" href="#top">Наверх</a>
+    </div>
+  </aside>
+
   <main class="wrap">
 
-    <section class="heroFull" id="top">
-      <div class="heroFull__inner">
-        <div class="pill">Анонимно · Быстро · По делу</div>
+    <section class="heroOnly" id="top" aria-label="Главный экран">
+      <h1 class="heroOnly__title">Выбирай электив уверенно.</h1>
 
-        <h1 class="heroFull__title">Выбирай электив уверенно.</h1>
-
-        <p class="heroFull__lead muted">
-          Оценки, строгость, понимающий ли препод?
-        </p>
-
-        <div class="cta">
-          <a class="btn btn--primary btn--xl" href="app.html">Открыть приложение</a>
-        </div>
-
-        <a class="scrollHint muted" href="#after-hero" aria-label="Прокрутить вниз">
-          <span class="scrollHint__dot" aria-hidden="true"></span>
-          Листай вниз
-        </a>
-      </div>
+      <a class="scrollCue" href="#content" aria-label="Прокрутить вниз">
+        <span class="scrollCue__dot" aria-hidden="true"></span>
+        <span class="scrollCue__text">Листай вниз</span>
+      </a>
     </section>
 
-    <div id="after-hero"></div>
+    <div id="content"></div>
+
+    <section class="card intro">
+      <p class="intro__text muted">
+        Оценки, строгость и теги — чтобы понять курс за минуту.
+      </p>
+      <a class="btn btn--primary btn--lg" href="app.html">Открыть приложение</a>
+    </section>
 
     <section class="grid3" aria-label="Ключевые преимущества">
       <article class="card imgCard">
@@ -97,44 +103,35 @@
       </article>
 
       <article class="card imgCard">
-        <img class="imgCard__img" src="images/cat_helps_another_cat_funn.jpg" alt="Влияй" loading="lazy">
+        <img class="imgCard__img" src="images/cat_helps_another_cat_funn.jpg" alt="Выбирай" loading="lazy">
         <div class="imgCard__body">
-          <div class="imgCard__title">Делай выбор</div>
+          <div class="imgCard__title">Выбирай</div>
           <div class="imgCard__text muted">Меньше сомнений — больше ясности.</div>
         </div>
       </article>
     </section>
 
-    <section class="card sampleWrap" aria-label="Пример карточки преподавателя">
-      <div class="sample">
-        <div class="sample__top">
-          <span class="badge">Пример карточки</span>
-          <div class="score" aria-label="Рейтинг 4.6 из 5">
+    <section class="card miniCardWrap" aria-label="Пример карточки">
+      <div class="miniCard">
+        <div class="miniCard__row">
+          <div class="miniCard__name">Asanov Uson</div>
+          <div class="miniCard__score">
             <span class="dot" aria-hidden="true"></span>
-            <span class="score__num">4.6</span>
-            <span class="muted">/ 5</span>
+            <span class="miniCard__num">4.6</span>
           </div>
         </div>
-
-        <div class="sample__name">Asanov Uson</div>
-        <div class="sample__meta muted">Отзывов: 27 · Снова бы взяли: 78%</div>
-
-        <div class="chips" aria-label="Теги">
-          <span class="chip">Полезный фидбек</span>
-          <span class="chip">Домашка есть</span>
+        <div class="miniCard__meta muted">27 отзывов · 78% взяли бы снова</div>
+        <div class="miniCard__chips">
+          <span class="chip">Фидбек</span>
+          <span class="chip">Домашка</span>
           <span class="chip">Справедливо</span>
-        </div>
-
-        <div class="note muted">
-          В приложении можно фильтровать и сравнивать преподавателей.
         </div>
       </div>
     </section>
 
-    <section class="card faq" aria-label="FAQ">
+    <section class="card faq" id="faq" aria-label="FAQ">
       <div class="faq__head">
         <h2 class="h2">FAQ</h2>
-        <p class="muted small">Нажми на вопрос — откроется ответ.</p>
       </div>
 
       <details class="faqItem" open>
@@ -150,7 +147,7 @@
           <span>Что именно оценивается?</span>
           <span class="chev" aria-hidden="true">⌄</span>
         </summary>
-        <div class="faqA muted">Качество курса, строгость и полезные теги о преподе</div>
+        <div class="faqA muted">Качество курса, строгость, “взял(а) бы снова” и теги.</div>
       </details>
 
       <details class="faqItem">
@@ -158,19 +155,11 @@
           <span>Почему нет комментариев?</span>
           <span class="chev" aria-hidden="true">⌄</span>
         </summary>
-        <div class="faqA muted">Ответ прост, у нас нет модерации. Не думаю что добавим модерцию!</div>
-      </details>
-
-      <details class="faqItem">
-        <summary class="faqQ">
-          <span>Можно ли одним отзывом “сломать” рейтинг?</span>
-          <span class="chev" aria-hidden="true">⌄</span>
-        </summary>
-        <div class="faqA muted">Нет. Итоговые значения сглаживают единичные выбросы. Удаляем спам отзывы, так что отзывы являются реальными отзывами!</div>
+        <div class="faqA muted">Чтобы не было хаоса. Теги дают пользу без токсичности.</div>
       </details>
     </section>
 
-    <section class="card endCta" aria-label="Переход в приложение">
+    <section class="card endCta">
       <div>
         <div class="endCta__title">Готов перейти?</div>
         <div class="muted small">Открой преподавателей и выбери уверенно.</div>
@@ -190,27 +179,80 @@
     </div>
   </footer>
 
-  <!-- Theme toggle (мини и автономно, чтобы не зависеть от твоего script.js) -->
   <script>
     (function(){
       const root = document.documentElement;
-      const btn = document.getElementById('themeToggle');
-      const label = document.getElementById('themeLabel');
-      const icon = document.getElementById('themeIcon');
 
-      function apply(theme){
+      // Theme controls
+      const dBtn = document.getElementById('themeToggleDesktop');
+      const dLabel = document.getElementById('themeLabelDesktop');
+      const dIcon = document.getElementById('themeIconDesktop');
+
+      const mBtn = document.getElementById('themeToggleMobile');
+      const mLabel = document.getElementById('themeLabelMobile');
+      const mIcon = document.getElementById('themeIconMobile');
+
+      function applyTheme(theme){
         root.setAttribute('data-theme', theme);
         try { localStorage.setItem('theme', theme); } catch(e){}
-        if(label) label.textContent = theme === 'light' ? 'Светлая' : 'Тёмная';
-        if(icon) icon.textContent = theme === 'light' ? '☀️' : '🌙';
+        const isLight = theme === 'light';
+        if(dLabel) dLabel.textContent = isLight ? 'Светлая' : 'Тёмная';
+        if(dIcon) dIcon.textContent = isLight ? '☀️' : '🌙';
+        if(mLabel) mLabel.textContent = isLight ? 'Светлая' : 'Тёмная';
+        if(mIcon) mIcon.textContent = isLight ? '☀️' : '🌙';
       }
 
       const saved = (()=>{ try { return localStorage.getItem('theme'); } catch(e){ return null; }})();
-      apply(saved || root.getAttribute('data-theme') || 'dark');
+      applyTheme(saved || root.getAttribute('data-theme') || 'dark');
 
-      btn && btn.addEventListener('click', () => {
+      function toggleTheme(){
         const cur = root.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
-        apply(cur === 'light' ? 'dark' : 'light');
+        applyTheme(cur === 'light' ? 'dark' : 'light');
+      }
+
+      dBtn && dBtn.addEventListener('click', toggleTheme);
+      mBtn && mBtn.addEventListener('click', toggleTheme);
+
+      // Mobile menu
+      const openBtn = document.getElementById('mMenuBtn');
+      const menu = document.getElementById('mMenu');
+      const overlay = document.getElementById('mOverlay');
+      const closeBtn = document.getElementById('mClose');
+      const goContent = document.getElementById('mGoContent');
+
+      function openMenu(){
+        menu.hidden = false;
+        overlay.hidden = false;
+        requestAnimationFrame(() => {
+          menu.classList.add('isOpen');
+          overlay.classList.add('isOpen');
+        });
+        openBtn.setAttribute('aria-expanded', 'true');
+        document.body.classList.add('noScroll');
+      }
+
+      function closeMenu(){
+        menu.classList.remove('isOpen');
+        overlay.classList.remove('isOpen');
+        openBtn.setAttribute('aria-expanded', 'false');
+        document.body.classList.remove('noScroll');
+        setTimeout(() => {
+          menu.hidden = true;
+          overlay.hidden = true;
+        }, 160);
+      }
+
+      openBtn && openBtn.addEventListener('click', () => {
+        const expanded = openBtn.getAttribute('aria-expanded') === 'true';
+        expanded ? closeMenu() : openMenu();
+      });
+
+      closeBtn && closeBtn.addEventListener('click', closeMenu);
+      overlay && overlay.addEventListener('click', closeMenu);
+      goContent && goContent.addEventListener('click', closeMenu);
+
+      document.addEventListener('keydown', (e) => {
+        if(e.key === 'Escape' && openBtn.getAttribute('aria-expanded') === 'true') closeMenu();
       });
     })();
   </script>
