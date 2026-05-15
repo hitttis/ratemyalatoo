@@ -39,6 +39,57 @@
 
   <main class="wrap">
     <h4 style="color: red;">Удаление сайта произойдет только в случае прямой жалобы правообладателя вуза в официальных группах университета или через report(сайт). Личные сообщения и угрозы учителей не являются основанием для закрытия площадки</h4>
+
+    <!-- GIVEAWAY SECTION START -->
+    <div id="giveaway-trigger" class="card" style="cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; width: 100%; padding: 10px 0; margin-bottom: 10px; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+      <img src="images\defaults\money.png" alt="100 сомов" width="128" height="60" style="display: block;">
+      <span style="font-size: 1.1em; color: #fff;">Выиграй 100 сом!</span>
+    </div>
+
+    <div id="giveaway-conditions" class="card" style="display: none; margin-bottom: 20px; text-align: center; padding: 20px;">
+      <h3 style="margin-top: 0; color: #fff;">Условия розыгрыша 💸</h3>
+      <p style="color: #ccc; line-height: 1.5; margin-bottom: 10px;">
+        Удержись на <strong>1 месте</strong> в топе нашей мини-игры в течение и забирай 100 сомов!<br>
+      </p>
+      
+      <div id="countdown" style="margin-bottom: 15px; font-weight: bold; color: #ffeb3b;">Осталось: загрузка...</div>
+
+      <a href="game.html" class="btn btn--primary" target="_blank" rel="noopener" style="display: inline-block;">Перейти в игру</a>
+    </div>
+
+    <script>
+      document.getElementById('giveaway-trigger').addEventListener('click', function() {
+        var conditions = document.getElementById('giveaway-conditions');
+        if (conditions.style.display === 'none') {
+          conditions.style.display = 'block';
+        } else {
+          conditions.style.display = 'none';
+        }
+      });
+
+      const targetDate = new Date("May 23, 2026 00:00:00").getTime();
+      
+      const timerInterval = setInterval(function() {
+        const now = new Date().getTime();
+        const distance = targetDate - now;
+
+        if (distance < 0) {
+          clearInterval(timerInterval);
+          document.getElementById('countdown').innerHTML = "Итоги подводятся!";
+          return;
+        }
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById('countdown').innerHTML = 
+          "Осталось: " + days + "д " + hours + "ч " + minutes + "м " + seconds + "с";
+      }, 1000);
+    </script>
+    <!-- GIVEAWAY SECTION END -->
+
     <section class="controls card">
       <div class="controls__grid">
         <label class="field">
