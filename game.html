@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Double Reflex</title>
+    <style>
+        :root {
+            --bg-color: #0a0a0c;
+            --box-idle: #1e1e26;
+            --neon-green: #39ff14;
+            --neon-red: #ff073a;
+            --neon-blue: #00e5ff;
+            --neon-yellow: #ffae00;
+            --text-main: #ffffff;
+            --text-dim: #888899;
+            --font-main: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        * { box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            margin: 0;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-main);
+            overflow: hidden;
+            touch-action: none;
+            overscroll-behavior: none;
+            display: flex;
+            flex-direction: column;
+            height: 100dvh;
+            width: 100vw;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 0; left: 0; width: 100%;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: max(1.5rem, env(safe-area-inset-top)) 1.5rem 1rem 1.5rem;
+            z-index: 10;
+        }
+        
+        .player-identity { font-size: 0.9rem; color: var(--neon-blue); font-family: monospace; letter-spacing: 1px; font-weight: bold; }
+        
+        .btn-icon {
+            background: rgba(255, 255, 255, 0.1); border: none; border-radius: 50%;
+            width: 45px; height: 45px; font-size: 1.2rem; display: flex;
+            align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;
+        }
+        .btn-icon:active { transform: scale(0.9); background: rgba(0, 229, 255, 0.3); }
+
+        .header { display: flex; justify-content: space-between; align-items: flex-start; padding: 1.5rem; z-index: 10; }
+        .stat-block { display: flex; flex-direction: column; flex: 1; }
+        .stat-block.center { text-align: center; }
+        .stat-block.right { text-align: right; }
+
+        .label { font-size: 0.7rem; letter-spacing: 1px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 0.2rem; }
+        .value { font-size: 1.8rem; font-weight: 800; line-height: 1.2; transition: transform 0.1s ease-out, color 0.3s ease; }
+        .value.pop { transform: scale(1.3); color: var(--neon-green); }
+        
+        #ui-window { color: var(--text-main); font-family: monospace; }
+        #ui-window.warning { color: var(--neon-yellow); }
+        #ui-window.danger { color: var(--neon-red); text-shadow: 0 0 10px rgba(255, 7, 58, 0.4); }
+
+        .game-area {
+            flex-grow: 1; display: flex; flex-direction: row; align-items: center; 
+            justify-content: center; gap: 4vw; padding: 1rem 2rem; position: relative;
+        }
+
+        .box {
+            flex: 1; height: 45vh; max-width: 300px; background-color: var(--box-idle);
+            border-radius: 20px; cursor: pointer;
+            transition: transform 0.05s ease, background-color 0.1s ease, box-shadow 0.1s ease;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 6rem; font-weight: bold; color: rgba(255, 255, 255, 0.05);
+        }
+
+        .box:active { transform: scale(0.96); }
+        .box.green { background-color: var(--neon-green); box-shadow: 0 0 60px rgba(57, 255, 20, 0.4); color: transparent; }
+        .box.red { background-color: var(--neon-red); box-shadow: 0 0 60px rgba(255, 7, 58, 0.4); color: transparent; }
+
+        .center-message {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: rgba(10, 10, 12, 0.9); padding: 0.5rem 1rem; border-radius: 8px;
+            font-size: 1.5rem; font-weight: 800; color: var(--text-main);
+            letter-spacing: 2px; pointer-events: none; opacity: 0; transition: opacity 0.2s; z-index: 20;
+        }
+        .center-message.visible { opacity: 1; }
+
+        .controls { padding: 1rem; display: flex; justify-content: center; height: 12vh; margin-bottom: 2vh; }
+        
+        .btn {
+            background: transparent; color: var(--text-main); border: 2px solid var(--text-main);
+            padding: 1.2rem; font-size: 1rem; font-weight: 700;
+            letter-spacing: 1px; border-radius: 12px; cursor: pointer; width: 100%; max-width: 400px;
+            text-transform: uppercase;
+        }
+        .btn:active { transform: scale(0.95); }
+        .btn.hidden { display: none !important; }
+        
+        .btn-save { border-color: var(--text-dim); color: var(--text-dim); }
+        .btn-save:active, .btn-save.highlight {
+            border-color: var(--neon-green); background: rgba(57, 255, 20, 0.1);
+            color: var(--neon-green); box-shadow: 0 0 20px rgba(57, 255, 20, 0.2);
+        }
+        
+        .btn-revive { border-color: var(--neon-yellow); color: var(--neon-yellow); margin-bottom: 1rem; }
+        .btn-revive:active { background: rgba(255, 174, 0, 0.1); box-shadow: 0 0 20px rgba(255, 174, 0, 0.2); }
+
+        .tg-input-wrapper {
+            width: 100%; max-width: 400px; margin-bottom: 1.5rem; position: relative;
+        }
+        .tg-input {
+            width: 100%; padding: 1rem 1rem 1rem 3rem; background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--text-dim); border-radius: 12px; color: var(--text-main);
+            font-size: 1.2rem; font-family: monospace; outline: none; transition: all 0.3s ease;
+            user-select: auto; 
+        }
+        .tg-input:focus { border-color: var(--neon-blue); background: rgba(0, 229, 255, 0.05); box-shadow: 0 0 15px rgba(0, 229, 255, 0.2); }
+        .tg-input.error { border-color: var(--neon-red); animation: shake 0.3s; }
+        .tg-icon {
+            position: absolute; left: 1rem; top: 50%; transform: translateY(-50%);
+            color: var(--neon-blue); font-size: 1.2rem; font-weight: bold; pointer-events: none;
+        }
+
+        .overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(10, 10, 12, 0.95); backdrop-filter: blur(10px);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 100; transition: opacity 0.3s ease; padding: 2rem;
+        }
+        .overlay.hidden { opacity: 0; pointer-events: none; }
+        .overlay h1 { font-size: 3rem; margin: 0 0 1rem 0; text-align: center; line-height: 1; }
+        .overlay p { font-size: 1rem; color: var(--text-dim); margin: 0 0 2rem 0; text-align: center; line-height: 1.5; }
+        
+        .action-container { width: 100%; max-width: 400px; display: flex; flex-direction: column; align-items: center; }
+
+        .leaderboard-content {
+            width: 100%; max-width: 400px; max-height: 60vh; overflow-y: auto;
+            background: rgba(255,255,255,0.05); border-radius: 12px; padding: 1rem; margin-bottom: 2rem;
+        }
+        .lb-row { display: flex; justify-content: space-between; padding: 0.8rem 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .lb-row:last-child { border-bottom: none; }
+        .lb-rank { color: var(--text-dim); width: 30px; }
+        .lb-name { flex: 1; color: var(--text-main); font-family: monospace; }
+        .lb-score { color: var(--neon-blue); font-weight: bold; }
+        .lb-row.highlight { background: rgba(0, 229, 255, 0.1); border-radius: 4px; padding: 0.8rem 0.5rem; }
+
+        .game-over-title { color: var(--neon-red); }
+        .saved-title { color: var(--neon-green); }
+        .shake { animation: shake 0.3s cubic-bezier(.36,.07,.19,.97) both; }
+        
+        @keyframes shake {
+            0%, 100% { transform: translate(0, 0); }
+            20% { transform: translate(-10px, 5px); }
+            40% { transform: translate(10px, -5px); }
+            60% { transform: translate(-10px, -5px); }
+            80% { transform: translate(10px, 5px); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Внутриигровой UI -->
+    <div class="header">
+        <div class="stat-block">
+            <span class="label">Points</span>
+            <span class="value" id="ui-points">0</span>
+        </div>
+        <div class="stat-block center">
+            <span class="label">Window</span>
+            <span class="value" id="ui-window">1.00s</span>
+        </div>
+        <div class="stat-block right">
+            <span class="label">Round</span>
+            <span class="value" id="ui-round">1</span>
+        </div>
+    </div>
+
+    <div class="game-area">
+        <div class="box" id="box-0"></div>
+        <div class="center-message" id="message-display">3</div>
+        <div class="box" id="box-1"></div>
+    </div>
+
+    <div class="controls">
+        <button class="btn btn-save hidden" id="save-btn">SAVE & EXIT</button>
+    </div>
+
+    <!-- Главное Меню -->
+    <div class="overlay" id="overlay">
+        
+        <div class="top-bar">
+            <div class="player-identity" id="player-name">Player</div>
+            <button class="btn-icon" id="btn-leaderboard">🏆</button>
+        </div>
+
+        <h1 id="overlay-title">DOUBLE REFLEX</h1>
+        <p id="overlay-desc">Tap <span style="color:var(--neon-green)">GREEN</span>. Don't tap <span style="color:var(--neon-red)">RED</span>. Win prizes!</p>
+        
+        <div class="action-container">
+            <!-- Поле для Telegram -->
+            <div class="tg-input-wrapper" id="tg-wrapper">
+                <span class="tg-icon">@</span>
+                <input type="text" class="tg-input" id="tg-input" placeholder="Telegram Tag (for prizes)" autocomplete="off" autocorrect="off" spellcheck="false">
+            </div>
+
+            <button class="btn btn-revive hidden" id="btn-revive">REVIVE</button>
+            <button class="btn" id="btn-start">START RUN</button>
+        </div>
+    </div>
+
+    <!-- Окно Топ-10 -->
+    <div class="overlay hidden" id="leaderboard-overlay" style="z-index: 105;">
+        <h1 style="color: var(--neon-blue)">GLOBAL TOP 10</h1>
+        <div class="leaderboard-content" id="lb-content"></div>
+        <button class="btn" id="close-leaderboard" style="max-width: 400px; width: 100%;">CLOSE</button>
+    </div>
+
+    <script>
+        
+        const FIREBASE_URL = "https://doublereflex-default-rtdb.firebaseio.com/scores.json";
+        let isSaving = false; 
+        let globalUsername = ""; 
+        let localHighScore = parseInt(localStorage.getItem('dr_highscore') || '0');
+
+        const tgInput = document.getElementById('tg-input');
+        const playerNameDisplay = document.getElementById('player-name');
+        const tgWrapper = document.getElementById('tg-wrapper');
+
+        function loadSavedIdentity() {
+            const savedTg = localStorage.getItem('dr_tg_tag');
+            if (savedTg) {
+                tgInput.value = savedTg.replace('@', '');
+                updateIdentity(savedTg);
+            } else {
+                playerNameDisplay.innerText = "Guest";
+            }
+        }
+
+        function updateIdentity(tag) {
+            const formattedTag = tag.startsWith('@') ? tag : `@${tag}`;
+            globalUsername = formattedTag;
+            playerNameDisplay.innerText = formattedTag;
+            localStorage.setItem('dr_tg_tag', formattedTag);
+        }
+
+        loadSavedIdentity();
+
+        async function saveScoreToDB(score) {
+            if (isSaving) return false;
+            if (score <= localHighScore) return false; 
+            if (!globalUsername || globalUsername === '@') return false; 
+
+            isSaving = true;
+            setTimeout(() => { isSaving = false; }, 1000); 
+
+            localHighScore = score;
+            localStorage.setItem('dr_highscore', localHighScore);
+
+            const payload = {
+                name: globalUsername, 
+                score: score,
+                timestamp: Date.now()
+            };
+
+            try {
+                await fetch(FIREBASE_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(payload),
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                return true;
+            } catch (error) {
+                return false;
+            }
+        }
+
+        async function getLeaderboardFromDB() {
+            try {
+                const response = await fetch(`${FIREBASE_URL}?orderBy="score"&limitToLast=10`);
+                const data = await response.json();
+                
+                if (!data) return [];
+
+                let leaderboard = Object.values(data).sort((a, b) => {
+                    if (b.score !== a.score) return b.score - a.score;
+                    return a.timestamp - b.timestamp; 
+                });
+
+                return leaderboard;
+            } catch (error) {
+                return []; 
+            }
+        }
+
+
+
+        const uiPoints = document.getElementById('ui-points');
+        const uiRound = document.getElementById('ui-round');
+        const uiWindow = document.getElementById('ui-window');
+        const boxes = [document.getElementById('box-0'), document.getElementById('box-1')];
+        const saveBtn = document.getElementById('save-btn');
+        const messageDisplay = document.getElementById('message-display');
+        
+        const overlay = document.getElementById('overlay');
+        const overlayTitle = document.getElementById('overlay-title');
+        const overlayDesc = document.getElementById('overlay-desc');
+        const btnStart = document.getElementById('btn-start');
+        const btnRevive = document.getElementById('btn-revive');
+        
+        const lbOverlay = document.getElementById('leaderboard-overlay');
+        const lbContent = document.getElementById('lb-content');
+
+        let state = 'MENU'; 
+        let points = 0, round = 1, greenBoxIndex = -1;
+        let intermissionTimer, intermissionTimeLeft = 3;
+        let waitTimeout, reactionTimeout;
+        
+        const BASE_POINTS = 10, INITIAL_REACTION_MS = 1000, MIN_REACTION_MS = 150;
+
+        document.getElementById('btn-leaderboard').addEventListener('pointerdown', showLeaderboard);
+        document.getElementById('close-leaderboard').addEventListener('pointerdown', () => lbOverlay.classList.add('hidden'));
+        
+        btnStart.addEventListener('pointerdown', startFresh);
+        btnRevive.addEventListener('pointerdown', reviveRun);
+        saveBtn.addEventListener('pointerdown', saveAndExit);
+        
+        boxes[0].addEventListener('pointerdown', (e) => handleBoxClick(e, 0));
+        boxes[1].addEventListener('pointerdown', (e) => handleBoxClick(e, 1));
+        
+        document.body.addEventListener('touchstart', (e) => { 
+            if(e.target.tagName !== 'BUTTON' && e.target.tagName !== 'INPUT') e.preventDefault(); 
+        }, { passive: false });
+
+        function getReactionWindow(r) { return Math.max(MIN_REACTION_MS, INITIAL_REACTION_MS * Math.pow(0.85, r - 1)); }
+
+        function showOverlay(title, desc, type) {
+            overlayTitle.className = type === 'OVER' ? 'game-over-title' : (type === 'SAVED' ? 'saved-title' : '');
+            overlayTitle.innerText = title;
+            overlayDesc.innerHTML = desc;
+            
+            if (type === 'OVER' && points > 0) {
+                btnRevive.classList.remove('hidden');
+                btnRevive.innerText = `REVIVE (${Math.floor(points / 2)} PTS, SAME SPEED)`;
+                btnStart.innerText = 'START FRESH';
+                tgWrapper.style.display = 'none'; 
+            } else {
+                btnRevive.classList.add('hidden');
+                btnStart.innerText = type === 'SAVED' ? 'PLAY AGAIN' : 'START RUN';
+                tgWrapper.style.display = 'block'; 
+            }
+
+            overlay.classList.remove('hidden');
+            saveBtn.classList.add('hidden');
+            messageDisplay.classList.remove('visible');
+        }
+
+        function startFresh() {
+            const tgValue = tgInput.value.trim();
+            if (!tgValue) {
+                tgInput.classList.add('error');
+                setTimeout(() => tgInput.classList.remove('error'), 300);
+                tgInput.focus();
+                return; 
+            }
+
+            tgInput.blur();
+            
+            updateIdentity(tgValue);
+
+            points = 0; round = 1; updateUI();
+            overlay.classList.add('hidden');
+            startIntermission();
+        }
+
+        function reviveRun() {
+            points = Math.floor(points / 2); updateUI();
+            overlay.classList.add('hidden');
+            startIntermission(); 
+        }
+
+        function startIntermission() {
+            state = 'INTERMISSION'; resetBoxes();
+            saveBtn.classList.remove('hidden');
+            setTimeout(() => saveBtn.classList.add('highlight'), 100);
+            messageDisplay.classList.add('visible');
+            intermissionTimeLeft = 3; updateIntermissionDisplay();
+
+            clearInterval(intermissionTimer);
+            intermissionTimer = setInterval(() => {
+                intermissionTimeLeft--;
+                if (intermissionTimeLeft > 0) updateIntermissionDisplay();
+                else { clearInterval(intermissionTimer); startWait(); }
+            }, 1000);
+        }
+
+        function updateIntermissionDisplay() { messageDisplay.innerText = `READY IN ${intermissionTimeLeft}`; }
+
+        function startWait() {
+            state = 'WAITING';
+            saveBtn.classList.add('hidden'); saveBtn.classList.remove('highlight');
+            messageDisplay.classList.remove('visible');
+            waitTimeout = setTimeout(startReaction, 1000 + Math.random() * 2500);
+        }
+
+        function startReaction() {
+            state = 'REACTION';
+            greenBoxIndex = Math.random() > 0.5 ? 1 : 0;
+            boxes[greenBoxIndex].classList.add('green');
+            boxes[greenBoxIndex === 1 ? 0 : 1].classList.add('red');
+            reactionTimeout = setTimeout(() => { if (state === 'REACTION') gameOver(`TOO SLOW!`); }, getReactionWindow(round));
+        }
+
+        function handleBoxClick(e, index) {
+            e.preventDefault(); 
+            if (state === 'WAITING') { clearTimeout(waitTimeout); gameOver("TOO EARLY!"); return; }
+            if (state === 'REACTION') {
+                if (index === greenBoxIndex) winRound(e);
+                else gameOver("WRONG COLOR!");
+            }
+        }
+
+        function winRound(e) {
+            clearTimeout(reactionTimeout); state = 'WIN';
+            spawnParticles(e.clientX, e.clientY);
+            uiPoints.classList.add('pop'); setTimeout(() => uiPoints.classList.remove('pop'), 150);
+            points = points === 0 ? BASE_POINTS : points * 2;
+            round++; updateUI();
+            setTimeout(startIntermission, 400);
+        }
+
+        function gameOver(reason) {
+            state = 'OVER'; clearAllTimers(); resetBoxes();
+            document.body.classList.add('shake'); setTimeout(() => document.body.classList.remove('shake'), 300);
+
+            const desc = `<strong>${reason}</strong><br>Reaction window was ${(getReactionWindow(round)/1000).toFixed(2)}s.`;
+            setTimeout(() => showOverlay('GAME OVER', desc, 'OVER'), 500);
+        }
+
+        function saveAndExit() {
+            if (state !== 'INTERMISSION') return;
+            state = 'SAVED'; clearAllTimers(); resetBoxes();
+            
+            saveScoreToDB(points);
+            
+            let resultText = `You secured <strong>${points}</strong> points.<br><span style="color:var(--text-dim)">Saved under your TG tag: ${globalUsername}</span>`;
+            showOverlay('BANKED!', resultText, 'SAVED');
+        }
+
+        function updateUI() {
+            uiPoints.innerText = points; uiRound.innerText = round;
+            const currentWindow = getReactionWindow(round);
+            uiWindow.innerText = `${(currentWindow / 1000).toFixed(2)}s`;
+            uiWindow.className = 'value ' + (currentWindow < 300 ? 'danger' : currentWindow < 600 ? 'warning' : '');
+        }
+
+        function clearAllTimers() { clearInterval(intermissionTimer); clearTimeout(waitTimeout); clearTimeout(reactionTimeout); }
+        function resetBoxes() { boxes[0].className = 'box'; boxes[1].className = 'box'; }
+
+        function spawnParticles(x, y) {
+            for (let i = 0; i < 12; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                const angle = Math.random() * Math.PI * 2, dist = 40 + Math.random() * 80;
+                particle.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+                particle.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
+                particle.style.left = (x - 5) + 'px'; particle.style.top = (y - 5) + 'px';
+                document.body.appendChild(particle);
+                setTimeout(() => particle.remove(), 600);
+            }
+        }
+
+        async function showLeaderboard() {
+            if(state !== 'MENU' && state !== 'OVER' && state !== 'SAVED') return; 
+            lbOverlay.classList.remove('hidden');
+            lbContent.innerHTML = '<div style="text-align:center; color: var(--text-dim); padding: 2rem 0;">Loading Global Data...</div>';
+            
+            const data = await getLeaderboardFromDB();
+            lbContent.innerHTML = '';
+            
+            if (data.length === 0) {
+                lbContent.innerHTML = '<div style="text-align:center; color: var(--text-dim)">No records yet. Be the first!</div>';
+                return;
+            }
+
+            data.forEach((player, i) => {
+                const isMe = player.name === globalUsername;
+                lbContent.innerHTML += `
+                    <div class="lb-row ${isMe ? 'highlight' : ''}">
+                        <span class="lb-rank">#${i + 1}</span>
+                        <span class="lb-name">${player.name}</span>
+                        <span class="lb-score">${player.score}</span>
+                    </div>
+                `;
+            });
+        }
+    </script>
+</body>
+</html>
