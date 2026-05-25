@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>История Кыргызстана — Тест</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0f0d14;
+    --card: #17151f;
+    --border: #2a2536;
+    --accent: #c084fc;
+    --accent2: #f472b6;
+    --text: #e2e8f0;
+    --muted: #6b6480;
+    --wrong: #f87171;
+    --radius: 12px;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 16px;
+    gap: 24px;
+  }
+
+  header { text-align: center; }
+
+  header h1 {
+    font-family: 'Unbounded', sans-serif;
+    font-size: clamp(1.4rem, 4vw, 2.2rem);
+    color: var(--accent);
+    letter-spacing: -0.5px;
+  }
+
+  header p {
+    color: var(--muted);
+    font-size: 0.8rem;
+    margin-top: 6px;
+  }
+
+  .stats {
+    display: flex;
+    gap: 20px;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  .stats span b { color: var(--text); }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    width: 100%;
+    max-width: 680px;
+  }
+
+  .q-num {
+    font-size: 0.7rem;
+    color: var(--accent2);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+  }
+
+  .question {
+    font-family: 'Unbounded', sans-serif;
+    font-size: clamp(0.88rem, 2.5vw, 1.02rem);
+    line-height: 1.65;
+    color: var(--text);
+    margin-bottom: 28px;
+  }
+
+  .answer-box {
+    background: #0b0910;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px;
+    font-size: 0.88rem;
+    line-height: 1.75;
+    color: #94a3b8;
+    display: none;
+    white-space: pre-wrap;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .answer-box.visible { display: block; }
+
+  .answer-box .label {
+    font-size: 0.68rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .answer-box .answer-text { color: var(--text); }
+
+  .actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 22px;
+    flex-wrap: wrap;
+  }
+
+  button {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82rem;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 1px solid;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    letter-spacing: 0.5px;
+  }
+
+  .btn-reveal {
+    background: transparent;
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+  .btn-reveal:hover { background: var(--accent2); color: #000; }
+
+  .btn-correct {
+    background: transparent;
+    border-color: #4ade80;
+    color: #4ade80;
+  }
+  .btn-correct:hover { background: #4ade80; color: #000; }
+
+  .btn-wrong {
+    background: transparent;
+    border-color: var(--wrong);
+    color: var(--wrong);
+  }
+  .btn-wrong:hover { background: var(--wrong); color: #000; }
+
+  .btn-next {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #000;
+    font-weight: 700;
+    margin-left: auto;
+  }
+  .btn-next:hover { opacity: 0.85; }
+
+  .progress-bar {
+    width: 100%;
+    max-width: 680px;
+    height: 4px;
+    background: var(--border);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    border-radius: 99px;
+    transition: width 0.4s ease;
+  }
+
+  .result-screen {
+    text-align: center;
+    max-width: 480px;
+  }
+
+  .result-screen h2 {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 1.8rem;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  .score-big {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 4rem;
+    color: var(--text);
+    line-height: 1;
+    margin: 20px 0;
+  }
+
+  .score-big span { color: var(--muted); font-size: 2rem; }
+
+  .result-screen p {
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin-bottom: 24px;
+  }
+
+  .btn-restart {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #000;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 14px 32px;
+  }
+  .btn-restart:hover { opacity: 0.85; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>ИСТОРИЯ</h1>
+  <p>Кыргызстан тарыхы — Гос экзамен</p>
+</header>
+
+<div class="stats">
+  <span>Вопрос <b id="qNum">—</b> / <b id="qTotal">—</b></span>
+  <span>✓ <b id="correct">0</b></span>
+  <span>✗ <b id="wrong">0</b></span>
+</div>
+
+<div class="progress-bar">
+  <div class="progress-fill" id="progressFill" style="width:0%"></div>
+</div>
+
+<div class="card" id="quizCard">
+  <div class="q-num" id="qLabel">ВОПРОС</div>
+  <div class="question" id="questionText"></div>
+
+  <div class="answer-box" id="answerBox">
+    <span class="label">// ответ</span>
+    <div class="answer-text" id="answerText"></div>
+  </div>
+
+  <div class="actions" id="actionsA">
+    <button class="btn-reveal" onclick="revealAnswer()">👁 Показать ответ</button>
+  </div>
+
+  <div class="actions hidden" id="actionsB">
+    <button class="btn-correct" onclick="mark(true)">✓ Знал</button>
+    <button class="btn-wrong" onclick="mark(false)">✗ Не знал</button>
+    <button class="btn-next" onclick="next()">Следующий →</button>
+  </div>
+</div>
+
+<div class="result-screen hidden" id="resultScreen">
+  <h2>Тест завершён!</h2>
+  <div class="score-big" id="scoreBig">0 <span>/ 0</span></div>
+  <p id="resultMsg"></p>
+  <button class="btn-restart" onclick="restart()">↺ Начать заново</button>
+</div>
+
+<script>
+const questions = [
+  {
+    q: "В каком веке было основано Тюргешское каганство?",
+    a: "В период VIII века на территории Семиречья."
+  },
+  {
+    q: "Какой город был главным центром Тюргешского каганата?",
+    a: "Суяб"
+  },
+  {
+    q: "Как разделился Тюргешский каганат?",
+    a: "На две части: Жёлтые (Сары) и Чёрные (Кара) тюргеши."
+  },
+  {
+    q: "В каком году официально был основан Великий Тюркский каганат?",
+    a: "В 552 г. (существовал 552–745 гг.)"
+  },
+  {
+    q: "По какой причине Тюркский каганат разделился на две части?",
+    a: "Не сумев объединить силы против внешних врагов."
+  },
+  {
+    q: "Кто был одним из самых известных правителей Караханидов?",
+    a: "Сатук Богра-хан — первый правитель, принявший ислам."
+  },
+  {
+    q: "Какую религию приняли уйгуры в качестве основной?",
+    a: "Манихейство (позже уйгуры приняли буддизм, затем ислам)."
+  },
+  {
+    q: "Какое государство разгромила Великая Кыргызская держава, чтобы установить господство в Центральной Азии?",
+    a: "Уйгурский каганат (840 г.)"
+  },
+  {
+    q: "В какой период Великая Кыргызская держава усилилась и контролировала большую часть Центральной Азии?",
+    a: "IX–X века"
+  },
+  {
+    q: "Из государств VIII–X вв. в Центральной Азии (Карлуки, Караханиды, Уйгуры, Великие Кыргызы) — какое первым приняло ислам как государственную религию?",
+    a: "Караханидское государство — первое тюркское государство, принявшее ислам как государственную религию."
+  },
+  {
+    q: "Какие вспомогательные науки помогают истории?",
+    a: "Палеография, Дипломатика, Генеалогия, Геральдика, Сфрагистика, Нумизматика, Хронология, Этнография, Археология."
+  },
+  {
+    q: "На какие три большие группы делятся исторические источники?",
+    a: "Вещественные, письменные и устные."
+  },
+  {
+    q: "В каком труде историка XVI века Мухаммеда Хайдара упоминаются кыргызы?",
+    a: "В труде «Тарих-и Рашиди»."
+  },
+  {
+    q: "На какие части разделился Великий Тюркский каганат?",
+    a: "Восточно-тюркский каганат (604–630 гг.) в Монголии и Западно-тюркский каганат (604–657 гг.) в Джунгарии и Средней Азии."
+  },
+  {
+    q: "В каком году Енисейские кыргызы захватили столицу уйгуров — город Ордо-Балык?",
+    a: "В 840 году."
+  },
+  {
+    q: "В какой период существовало «Кыргызское Великодержавие»?",
+    a: "840–924 гг. (IX–X вв.)"
+  },
+  {
+    q: "Какие религии исповедовали кыргызы Енисея?",
+    a: "Тенгрианство, манихейство, шаманизм, несторианство, буддизм."
+  },
+  {
+    q: "Как называлось государство кыргызов в VI веке?",
+    a: "Тюркский каганат."
+  },
+  {
+    q: "Какой титул носил глава государства енисейских кыргызов?",
+    a: "Ажо, Коган."
+  },
+  {
+    q: "Кто был каганом государства енисейских кыргызов?",
+    a: "Барсбек-каган."
+  },
+  {
+    q: "На территории какого современного региона образовался Тюргешский каганат?",
+    a: "Семиречье и Тянь-Шань (территория современного Кыргызстана)."
+  },
+  {
+    q: "В каких источниках впервые упоминается этноним «кыргыз»?",
+    a: "У Сыма Цяня в труде «Исторические хроники»."
+  },
+  {
+    q: "Какое государство существовало на территории Кыргызстана в X–XII веках?",
+    a: "Караханидское государство."
+  },
+  {
+    q: "Кто является автором «Диван лугат-ат тюрк»?",
+    a: "Махмуд Кашгари."
+  },
+  {
+    q: "Укажите характер восстания 1916 года в Кыргызстане.",
+    a: "Национально-освободительный, антиколониальный и антицарский."
+  },
+  {
+    q: "В какую страну вынуждены были бежать кыргызы после подавления восстания 1916 года?",
+    a: "В Китай (Синьцзян)."
+  },
+  {
+    q: "В каком месяце 1916 года начался «исход» кыргызов в Китай?",
+    a: "В декабре 1916 года."
+  },
+  {
+    q: "По китайским данным, из области Джеты-Суу в Китай бежало 332 тыс. человек. Сколько из них были кыргызами?",
+    a: "130 тысяч кыргызов."
+  },
+  {
+    q: "Когда впервые упоминается этноним «кыргыз»? Укажите год.",
+    a: "В 201 г. — в китайской летописи."
+  },
+  {
+    q: "Кто активно выступал против создания Горной Кыргызской области?",
+    a: "Кудайкулов, Рахманкул; также критику выражал Юсуп Абдрахманов (в своём дневнике критиковал правление Сталина)."
+  },
+  {
+    q: "В каком году была создана Горная Кыргызская область?",
+    a: "В 1922 году."
+  },
+  {
+    q: "В каком году была создана Кыргызская Автономная Советская Социалистическая Республика (КАССР)?",
+    a: "1 февраля 1926 г."
+  },
+  {
+    q: "Чем известен Абдыкадыр Орозбеков в кыргызской истории?",
+    a: "Являлся председателем Киргизской АССР (1931–1932) и внёс значительный вклад в укрепление правовых основ государства и общества."
+  },
+  {
+    q: "В каком году началась волна массовых сталинских репрессий, охватившая интеллигенцию Кыргызстана?",
+    a: "В 1930-х годах. Наиболее интенсивной была в 1937–1938 годах."
+  },
+  {
+    q: "В каком году произошло массовое захоронение 138 видных партийных и советских работников в Чон-Таше?",
+    a: "В начале ноября 1938 года."
+  },
+  {
+    q: "Назовите представителей кыргызской интеллигенции, ставших жертвами репрессий.",
+    a: "Касым Тыныстанов, Ишеналы Арабаев, Баялы Исакеев, Мукамбет Кашкеев, Зияш Бектенов.\nАалы Токомбаев был арестован, но выжил."
+  },
+  {
+    q: "Кто работал первым секретарём ЦК КП Кыргызстана в 1950–1961 гг.?",
+    a: "Исхак Раззакович Раззаков."
+  },
+  {
+    q: "Расположите правителей СССР по порядку.",
+    a: "1. Ленин В.И. (1870–1924)\n2. Сталин И.В. (1878–1953)\n3. Хрущёв Н.С. (1953–1964)\n4. Брежнев Л.И. (1964–1982)\n5. Андропов Ю.В. (1982–1984)\n6. Черненко К.У. (1984–1985)\n7. Горбачёв М.С. (1985–1991)"
+  },
+  {
+    q: "Соотнесите руководителей СССР и Кыргызской ССР по эпохам.",
+    a: "Сталин (1924–1953) → И. Раззаков (1950–1961)\nХрущёв (1953–1964) → И. Раззаков / Т. Усубалиев\nБрежнев (1964–1982) → Т. Усубалиев\nАндропов (1982–1984) → Т. Усубалиев\nЧерненко (1984–1985) → Т. Усубалиев\nГорбачёв (1985–1991) → А. Масалиев"
+  },
+  {
+    q: "Соотнесите даты правления руководителей СССР: Хрущёв, Брежнев, Горбачёв.",
+    a: "Н.С. Хрущёв: 1953–1964\nЛ.И. Брежнев: 1964–1982\nМ.С. Горбачёв: 1985–1991"
+  },
+  {
+    q: "Соотнесите даты правления руководителей Кыргызской ССР: Раззаков, Усубалиев, Масалиев.",
+    a: "И. Раззаков: 1950–1961\nТ. Усубалиев: 1961–1985\nА. Масалиев: 1985–1991"
+  },
+  {
+    q: "Что было основной целью политики перестройки?",
+    a: "Переход к демократии, экономические реформы и развитие, улучшение эффективности управления."
+  },
+  {
+    q: "Кто был первым секретарём ЦК КП Кыргызстана в 1985–1990 гг.?",
+    a: "Абсамат Масалы уулу Масалиев."
+  },
+  {
+    q: "За что Михаилу Горбачёву присудили Нобелевскую премию мира в 1990 г.?",
+    a: "За роль в завершении холодной войны и налаживании сотрудничества между европейскими странами."
+  },
+  {
+    q: "Какова основная причина распада СССР?",
+    a: "Экономический кризис."
+  },
+  {
+    q: "Что было характерно для внутренней политики М. Горбачёва?",
+    a: "Омоложение высших партийных кадров."
+  },
+  {
+    q: "Укажите годы «перестройки».",
+    a: "1985 (активная фаза с 1987) – 1991 гг."
+  },
+  {
+    q: "Как называлось явление острой нехватки товаров и услуг в СССР?",
+    a: "Дефицит."
+  },
+  {
+    q: "Кто возглавлял Киргизскую ССР во время Ошской резни?",
+    a: "Масалиев."
+  },
+  {
+    q: "Какое событие стало ключевым в становлении авторитарного режима А. Акаева в КР?",
+    a: "Референдум 2000 года."
+  },
+  {
+    q: "Какие действия предпринял президент А. Акаев для укрепления своей власти?",
+    a: "Изменение конституции, использование административных ресурсов, поддержка местных элит, контроль над СМИ."
+  },
+  {
+    q: "Когда произошла «Тюльпановая революция» в Кыргызстане?",
+    a: "В 2005 году."
+  },
+  {
+    q: "Каким образом президент Акаев изменял конституцию в ходе своего президентства?",
+    a: "Проводил конституционные референдумы."
+  },
+  {
+    q: "Что стало последней каплей, приведшей к «Тюльпановой революции»?",
+    a: "Общественное недовольство авторитарными методами управления, коррупция, экономические проблемы, рост цен, избирательные нарушения и ограничение политических свобод."
+  },
+  {
+    q: "Как стал называться законодательный орган Кыргызстана после принятия новой конституции в мае 1993 года?",
+    a: "Жогорку Кенеш Кыргызской Республики."
+  },
+  {
+    q: "Какие события в других постсоветских странах оказали влияние на «Тюльпановую революцию»?",
+    a: "«Оранжевая революция» (Украина) и «Революция роз» (Грузия)."
+  },
+  {
+    q: "В каком году была введена первая национальная валюта Кыргызстана — сом?",
+    a: "10 мая 1993 года."
+  },
+  {
+    q: "Какая основная трудность возникла при введении сома?",
+    a: "Инфляция."
+  },
+  {
+    q: "Когда была принята Конституция Кыргызской Республики?",
+    a: "5 мая 1993 года."
+  },
+  {
+    q: "Соотнесите государственные символы КР с датами их принятия.",
+    a: "Герб — 14 января 1994\nГимн — 18 декабря 1992\nФлаг — 3 марта 1992\nКонституция — 5 мая 1993"
+  },
+  {
+    q: "В каком регионе проживают кыргызы в Китае?",
+    a: "Кыргызский округ Кызыл-Суу, Синьцзян-Уйгурский автономный район (Китай)."
+  },
+  {
+    q: "В чём основная проблема афганских кыргызов?",
+    a: "Отсутствие гражданства и бедность."
+  },
+  {
+    q: "В каком регионе Турции больше всего кыргызов?",
+    a: "В провинции Ван на востоке Турции."
+  },
+  {
+    q: "На территориях каких государств проживают кыргызы Ферганы?",
+    a: "На территориях Узбекистана, Кыргызстана и Таджикистана."
+  },
+  {
+    q: "На каком языке в основном говорят памирские кыргызы?",
+    a: "На кыргызском и памирских языках."
+  },
+  {
+    q: "После каких исторических событий кыргызы начали массово оседать в Ферганской долине?",
+    a: "После присоединения Средней Азии к Российской империи в XIX веке."
+  },
+  {
+    q: "Какие номиналы входили в первую серию кыргызских денег?",
+    a: "1, 5, 20 сомов и 1, 10, 50 тыйынов."
+  },
+  {
+    q: "Кто из выдающихся кыргызских писателей был репрессирован в годы сталинских репрессий?",
+    a: "Касым Тыныстанов, Ташим Байджиев, Зияш Бектенов, Ишеналы Арабаев.\nАалы Токомбаев был арестован, но выжил."
+  },
+  {
+    q: "Сколько людей погибло в годы массовых сталинских репрессий в Кыргызстане? Сколько реабилитировано?",
+    a: "Уничтожено около 40 000 человек. Реабилитировано на сегодня — около 13 000."
+  },
+  {
+    q: "Какова была основная цель репрессий против интеллигенции в СССР?",
+    a: "Удержание власти советским режимом, борьба с инакомыслием, запугивание общества, решение экономических проблем."
+  },
+  {
+    q: "Кто является автором книги «История красных кыргызов»?",
+    a: "Белек Солтоноев."
+  },
+  {
+    q: "Кто был первым лидером кыргызской государственности при Советской власти?",
+    a: "Юсуп Абдрахманов."
+  }
+];
+
+let order = [];
+let current = 0;
+let correctCount = 0;
+let wrongCount = 0;
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function restart() {
+  order = shuffle([...Array(questions.length).keys()]);
+  current = 0;
+  correctCount = 0;
+  wrongCount = 0;
+
+  document.getElementById('resultScreen').classList.add('hidden');
+  document.getElementById('quizCard').classList.remove('hidden');
+  document.querySelector('.stats').classList.remove('hidden');
+  document.querySelector('.progress-bar').classList.remove('hidden');
+
+  document.getElementById('correct').textContent = 0;
+  document.getElementById('wrong').textContent = 0;
+  document.getElementById('qTotal').textContent = questions.length;
+
+  showQuestion();
+}
+
+function showQuestion() {
+  const q = questions[order[current]];
+
+  document.getElementById('qLabel').textContent = `ВОПРОС ${current + 1} / ${questions.length}`;
+  document.getElementById('questionText').textContent = q.q;
+  document.getElementById('answerText').textContent = q.a;
+
+  document.getElementById('answerBox').classList.remove('visible');
+  document.getElementById('actionsA').classList.remove('hidden');
+  document.getElementById('actionsB').classList.add('hidden');
+
+  document.getElementById('qNum').textContent = current + 1;
+  document.getElementById('progressFill').style.width = `${(current / questions.length) * 100}%`;
+}
+
+function revealAnswer() {
+  document.getElementById('answerBox').classList.add('visible');
+  document.getElementById('actionsA').classList.add('hidden');
+  document.getElementById('actionsB').classList.remove('hidden');
+}
+
+function mark(isCorrect) {
+  if (isCorrect) {
+    correctCount++;
+    document.getElementById('correct').textContent = correctCount;
+  } else {
+    wrongCount++;
+    document.getElementById('wrong').textContent = wrongCount;
+  }
+  next();
+}
+
+function next() {
+  current++;
+  if (current >= questions.length) {
+    showResult();
+  } else {
+    showQuestion();
+  }
+}
+
+function showResult() {
+  document.getElementById('quizCard').classList.add('hidden');
+  document.querySelector('.stats').classList.add('hidden');
+  document.querySelector('.progress-bar').classList.add('hidden');
+
+  const total = questions.length;
+  const pct = Math.round((correctCount / total) * 100);
+
+  document.getElementById('scoreBig').innerHTML = `${correctCount} <span>/ ${total}</span>`;
+
+  let msg = '';
+  if (pct >= 90) msg = 'Отлично! Ты настоящий знаток истории Кыргызстана.';
+  else if (pct >= 70) msg = 'Хороший результат! Ещё немного практики.';
+  else if (pct >= 50) msg = 'Неплохо, но стоит повторить материал.';
+  else msg = 'Нужно больше практики. Попробуй ещё раз!';
+
+  document.getElementById('resultMsg').textContent = `${pct}% правильных ответов. ${msg}`;
+  document.getElementById('resultScreen').classList.remove('hidden');
+}
+
+restart();
+</script>
+</body>
+</html>

@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>География — Тест</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0f14;
+    --card: #151820;
+    --border: #252a36;
+    --accent: #4ade80;
+    --accent2: #38bdf8;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --wrong: #f87171;
+    --radius: 12px;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 16px;
+    gap: 24px;
+  }
+
+  header {
+    text-align: center;
+  }
+
+  header h1 {
+    font-family: 'Unbounded', sans-serif;
+    font-size: clamp(1.4rem, 4vw, 2.2rem);
+    color: var(--accent);
+    letter-spacing: -0.5px;
+  }
+
+  header p {
+    color: var(--muted);
+    font-size: 0.8rem;
+    margin-top: 6px;
+  }
+
+  .stats {
+    display: flex;
+    gap: 20px;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  .stats span b {
+    color: var(--text);
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    width: 100%;
+    max-width: 680px;
+  }
+
+  .q-num {
+    font-size: 0.7rem;
+    color: var(--accent2);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+  }
+
+  .question {
+    font-family: 'Unbounded', sans-serif;
+    font-size: clamp(0.9rem, 2.5vw, 1.05rem);
+    line-height: 1.6;
+    color: var(--text);
+    margin-bottom: 28px;
+  }
+
+  .answer-box {
+    background: #0a0c10;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px;
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: #94a3b8;
+    display: none;
+    white-space: pre-wrap;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .answer-box.visible {
+    display: block;
+  }
+
+  .answer-box .label {
+    font-size: 0.68rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .answer-box .answer-text {
+    color: var(--text);
+  }
+
+  .actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 22px;
+    flex-wrap: wrap;
+  }
+
+  button {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82rem;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 1px solid;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    letter-spacing: 0.5px;
+  }
+
+  .btn-reveal {
+    background: transparent;
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+  .btn-reveal:hover { background: var(--accent2); color: #000; }
+
+  .btn-correct {
+    background: transparent;
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .btn-correct:hover { background: var(--accent); color: #000; }
+
+  .btn-wrong {
+    background: transparent;
+    border-color: var(--wrong);
+    color: var(--wrong);
+  }
+  .btn-wrong:hover { background: var(--wrong); color: #000; }
+
+  .btn-next {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #000;
+    font-weight: 700;
+    margin-left: auto;
+  }
+  .btn-next:hover { opacity: 0.85; }
+
+  .progress-bar {
+    width: 100%;
+    max-width: 680px;
+    height: 4px;
+    background: var(--border);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    border-radius: 99px;
+    transition: width 0.4s ease;
+  }
+
+  .result-screen {
+    text-align: center;
+    max-width: 480px;
+  }
+
+  .result-screen h2 {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 1.8rem;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  .score-big {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 4rem;
+    color: var(--text);
+    line-height: 1;
+    margin: 20px 0;
+  }
+
+  .score-big span { color: var(--muted); font-size: 2rem; }
+
+  .result-screen p {
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin-bottom: 24px;
+  }
+
+  .btn-restart {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #000;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 14px 32px;
+  }
+  .btn-restart:hover { opacity: 0.85; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>ГЕОГРАФИЯ</h1>
+  <p>Кыргызстан — тест по вопросам</p>
+</header>
+
+<div class="stats">
+  <span>Вопрос <b id="qNum">—</b> / <b id="qTotal">—</b></span>
+  <span>✓ <b id="correct">0</b></span>
+  <span>✗ <b id="wrong">0</b></span>
+</div>
+
+<div class="progress-bar">
+  <div class="progress-fill" id="progressFill" style="width:0%"></div>
+</div>
+
+<!-- Quiz card -->
+<div class="card" id="quizCard">
+  <div class="q-num" id="qLabel">ВОПРОС</div>
+  <div class="question" id="questionText"></div>
+
+  <div class="answer-box" id="answerBox">
+    <span class="label">// ответ</span>
+    <div class="answer-text" id="answerText"></div>
+  </div>
+
+  <div class="actions" id="actionsA">
+    <button class="btn-reveal" onclick="revealAnswer()">👁 Показать ответ</button>
+  </div>
+
+  <div class="actions hidden" id="actionsB">
+    <button class="btn-correct" onclick="mark(true)">✓ Знал</button>
+    <button class="btn-wrong" onclick="mark(false)">✗ Не знал</button>
+    <button class="btn-next" onclick="next()">Следующий →</button>
+  </div>
+</div>
+
+<!-- Result screen -->
+<div class="result-screen hidden" id="resultScreen">
+  <h2>Тест завершён!</h2>
+  <div class="score-big" id="scoreBig">0 <span>/ 0</span></div>
+  <p id="resultMsg"></p>
+  <button class="btn-restart" onclick="restart()">↺ Начать заново</button>
+</div>
+
+<script>
+const questions = [
+  {
+    q: "Что такое география? Как переводится и что означает это слово?",
+    a: "География (греч. ge — земля, grapho — пишу, описание) – комплекс наук, изучающих поверхность Земли с её природными условиями, распределением населения и экономических ресурсов."
+  },
+  {
+    q: "Что является предметом и объектом изучения физической и экономико-социальной географии?",
+    a: "Физическая география — наука о природной составляющей географической оболочки и её природно-территориальных комплексах (землеведение, геология, климатология, гидрология и др.).\n\nЭкономическая и социальная география — система наук о территориальной организации общества и народного хозяйства."
+  },
+  {
+    q: "Какова общая протяжённость государственных границ Кыргызстана?",
+    a: "4 508 км"
+  },
+  {
+    q: "Через какой горный хребет проходит граница между Кыргызстаном и КНР (Китаем)?",
+    a: "Какшаальский горный хребет"
+  },
+  {
+    q: "Как называется процесс переговоров, направленный на уточнение государственных границ?",
+    a: "Делимитация"
+  },
+  {
+    q: "С каким государством Кыргызстан имеет самую протяжённую границу?",
+    a: "С Узбекистаном — 1 374 км"
+  },
+  {
+    q: "Чему равна протяжённость Кыргызстана с запада на восток?",
+    a: "925 км"
+  },
+  {
+    q: "Дайте определение терминам «анклав» и «эксклав».",
+    a: "Анклав (лат. inclavitus — закрытый) — часть территории государства, полностью окружённая территорией других государств без физического доступа к основной стране.\n\nЭксклав — то же самое с точки зрения государства, которому принадлежит данная территория."
+  },
+  {
+    q: "В каких горных системах расположена территория Кыргызстана?",
+    a: "Тянь-Шань и Памир-Алай"
+  },
+  {
+    q: "Какова средняя высота территории Кыргызстана над уровнем моря?",
+    a: "2 750 м"
+  },
+  {
+    q: "Назовите пики-семитысячники на территории Кыргызстана.",
+    a: "• Пик Победы — 7 439 м\n• Пик Ленина — 7 134 м\n• Пик Хан-Тенгри — 6 995 м (формально не входит в семитысячники)"
+  },
+  {
+    q: "Какова наименьшая высота территории Кыргызстана над уровнем моря?",
+    a: "Долина Кулунду — 401 м, Баткенская область"
+  },
+  {
+    q: "Из каких ярусов состоит рельеф Кыргызстана?",
+    a: "1) Высокогорье и среднегорье (2 000 м и выше) — тектонико-денудационный тип рельефа\n2) Предгорье (1 500–2 000 м) — тектонико-денудационно-аккумулятивный\n3) Равнины (ниже 1 500 м) — аккумулятивный"
+  },
+  {
+    q: "Каким образом эндогенные и экзогенные силы формируют рельеф?",
+    a: "Эндогенные силы (из недр Земли) — тектонические движения, землетрясения, вулканизм — создают горы и впадины.\n\nЭкзогенные процессы (энергия Солнца + сила тяжести) — выветривание, перенос и отложение горных пород — разрушают и выравнивают поверхность."
+  },
+  {
+    q: "Какой горный хребет имеет наибольшую протяжённость в Кыргызстане?",
+    a: "Какшаальский хребет — 582 км"
+  },
+  {
+    q: "Выделите отличительные черты континентального климата.",
+    a: "Большие амплитуды температур (жаркое лето, холодная зима), изменчивость погоды, небольшое количество осадков. Формируется под влиянием крупных массивов суши."
+  },
+  {
+    q: "На сколько градусов падает температура воздуха при подъёме на каждые 100 м?",
+    a: "На 0,6 °C"
+  },
+  {
+    q: "До скольких мм достигает наибольшее количество атмосферных осадков в Кыргызстане?",
+    a: "1 090 мм — пос. Актерек-Гава, Джалал-Абадская область"
+  },
+  {
+    q: "Назовите самый засушливый регион Кыргызстана.",
+    a: "г. Балыкчы — 144 мм осадков в год"
+  },
+  {
+    q: "Опишите климат высокогорья.",
+    a: "Низкая температура воздуха, разреженный воздух, низкое атмосферное давление, большое количество осадков, высокая солнечная радиация."
+  },
+  {
+    q: "Где наблюдаются самая высокая и самая низкая температура воздуха в Кыргызстане?",
+    a: "Максимум: Ферганская и Чуйская долины — +44 °C\nМинимум: долина Ак-Сай, Ат-Башинский р-н Нарынской обл. — −53 °C"
+  },
+  {
+    q: "Что такое фёновый ветер?",
+    a: "Фён — порывистый, сухой и тёплый местный ветер. Воздух нагревается при адиабатическом опускании по горным склонам (~0,6 °C/100 м). Сухость объясняется тем, что влага выпала на наветренном склоне."
+  },
+  {
+    q: "Что означают термины «климат» и «погода»?",
+    a: "Погода — совокупность метеорологических элементов и атмосферных явлений в определённый момент времени в данном месте.\n\nКлимат — многолетний режим погоды."
+  },
+  {
+    q: "Опишите горно-долинный ветер и бриз.",
+    a: "Горно-долинный ветер: днём дует вверх по склонам (долинный), ночью — вниз по горам (горный). Суточная периодичность.\n\nБриз: днём дует с моря/озера на сушу, ночью — наоборот. Причина — разница температур между водой и сушей."
+  },
+  {
+    q: "Перечислите крупнейшие ледники Кыргызстана.",
+    a: "1. Южный Энгильчек — 613,2 км², 58,9 км\n2. Северный Энгильчек — 202,9 км², 34,8 км\n3. Кайынды — 107,4 км², 25,8 км\n4. Корженевский — 89,1 км², 21,5 км\n5. Мушкетов — 75,0 км², 20,5 км\n6. Семёнов — 74,6 км², 21,0 км\n7. Петров — 70,9 км², 14,7 км"
+  },
+  {
+    q: "Что такое снеговая линия (линия вечного снега)?",
+    a: "Уровень поверхности, выше которого накопление твёрдых атмосферных осадков превышает их таяние и испарение."
+  },
+  {
+    q: "Сколько процентов территории Кыргызстана занимают ледники?",
+    a: "4%"
+  },
+  {
+    q: "Дайте основную характеристику реки Нарын.",
+    a: "Самая длинная река КР — 535 км. Образована слиянием Большого и Малого Нарына. Впадает в Аральское море (через Сырдарью). Площадь водосбора — 53,7 тыс. км². Расход воды — 429 м³/с. Питание: ледниково-снеговое. Половодье: май–август. На Нарыне расположен Нижне-Нарынский каскад ГЭС."
+  },
+  {
+    q: "Назовите реки, относящиеся к системе Сырдарьи.",
+    a: "Нарын, Карадарья, реки Ферганской долины, Чаткал"
+  },
+  {
+    q: "Какого происхождения озёра Кыргызстана?",
+    a: "1) Тектонические — Иссык-Куль, Сон-Куль, Чатыр-Куль\n2) Подпрудные — Сары-Челек\n3) Ледниковые — Мерцбахер, Кель-Тор"
+  },
+  {
+    q: "Какие социально-экономические функции выполняют водохранилища?",
+    a: "• Запас и регулирование стока воды (орошение)\n• Источник гидроэнергии\n• Защита от наводнений\n• Судоходство (устранение порогов и мелей)\n• Аквакультура"
+  },
+  {
+    q: "Опишите источники формирования и режим рек Кыргызстана.",
+    a: "Реки КР имеют ледниково-снеговое питание с летним половодьем (май–август)."
+  },
+  {
+    q: "Дайте характеристику природы озера Иссык-Куль.",
+    a: "Расположено на высоте 1 608 м между хребтами Кунгей Ала-Тоо и Терскей Ала-Тоо. Площадь — 6 236 км². Береговая линия — 688 км. Наибольшая глубина — 668 м. Длина З→В: 182 км, С→Ю: 58 км. Не замерзает благодаря большой глубине. Впадает более 80 рек. Солёность — 0,59‰."
+  },
+  {
+    q: "Укажите ареал еловых, арчовых, орехово-плодовых и тугайных лесов.",
+    a: "• Еловые — Северный склон Кыргызского Ала-Тоо, Кунгей, Терскей, Таласский Ала-Тоо, Ат-Башы, Нарын-Тоо\n• Арчовые — Северный склон Алайского и Туркестанского хребтов\n• Орехово-плодовые — Юго-западный склон Ферганского хребта\n• Тугайные — поймы рек"
+  },
+  {
+    q: "Какие функции выполняют города Кыргызстана?",
+    a: "• Полифункциональные: Бишкек, Ош\n• Полифункциональные средние с промышленностью: Токмак, Джалал-Абад, Кара-Балта, Каракол\n• Средние с менее развитой промышленностью: Нарын, Талас\n• Местные производственные центры: Шопоков\n• Транспортные узлы: Балыкчы\n• Туризм и отдых: Чолпон-Ата"
+  },
+  {
+    q: "Чем города, ПГТ и сельские поселения отличаются друг от друга?",
+    a: "Город — крупный населённый пункт, жители не заняты с/х, развитая экономика и инфраструктура.\n\nПГТ (посёлок городского типа) — промежуточный тип между городом и селом; население ведёт городской образ жизни, обычно связано с промышленным объектом.\n\nСельское поселение — население занято преимущественно сельским хозяйством."
+  },
+  {
+    q: "Дайте характеристику естественного прироста населения Кыргызстана.",
+    a: "Естественный прирост — разность между числом родившихся и умерших. В 2021 г.:\n• Рождаемость: 178 269 чел.\n• Смертность: 42 298 чел.\n• Естественный прирост: 135 971 чел.\n• Миграционный прирост: −26 313 чел."
+  },
+  {
+    q: "В какой долине находятся самые крупные площади пахотных земель Кыргызстана?",
+    a: "В Чуйской долине (~30% пашен страны)"
+  },
+  {
+    q: "Охарактеризуйте структуру землепользования в Кыргызстане.",
+    a: "Общая площадь: 19 994,5 тыс. га (100%)\n• С/х угодья: 10 797,2 тыс. га (54%)\n• Пастбища: 9 188 тыс. га (45,9%)\n• Пахотные земли: 1 237,2 тыс. га (6,1%)\n• Многолетние насаждения: 39,6 тыс. га (0,19%)\n• Сенокосы: 169,6 тыс. га (0,8%)\n• Непригодные земли: 9 197,3 тыс. га (45,9%)"
+  },
+  {
+    q: "Сколько пахотных земель приходится на 1 человека в Кыргызстане?",
+    a: "0,2 га"
+  },
+  {
+    q: "В каком регионе Кыргызстана выращивают хлопок?",
+    a: "В Ферганской долине"
+  },
+  {
+    q: "Дайте характеристику сахарной промышленности Кыргызстана.",
+    a: "Заводы: Кантский, Токмокский, Беловодский, Кайындинский. Основной регион выращивания сахарной свёклы — Чуйская область. Площадь посевов свёклы превышала 50 тыс. га. В 2000 г. произведено 57 137,3 т сахара-песка."
+  },
+  {
+    q: "Дайте характеристику текстильной промышленности Кыргызстана.",
+    a: "Промышленность обеспечивает ~19% ВВП, ~18% налоговых поступлений и >80% экспортных поставок. По итогам 2018 г. выпуск составил 250,6 млрд сомов."
+  },
+  {
+    q: "Какое место занимает Кыргызстан в международном разделении труда?",
+    a: "Специализация: цветная металлургия, электроэнергетика, сельское хозяйство, лёгкая и пищевая промышленность."
+  },
+  {
+    q: "Где расположено золоторудное месторождение Кумтор?",
+    a: "Горный массив Ак-Шыйрак, Джети-Огузский район, Иссык-Кульская область"
+  },
+  {
+    q: "Где расположено угольное месторождение Кара-Кече?",
+    a: "Кавакский угольный бассейн, Жумгальский район, Нарынская область"
+  },
+  {
+    q: "Что добывается в Чангырташе?",
+    a: "Нефть"
+  },
+  {
+    q: "Какие ГЭС входят в Нижне-Нарынский каскад?",
+    a: "Токтогульская, Курпсайская, Ташкумырская, Шамалдысайская, Учкурганская ГЭС"
+  },
+  {
+    q: "Где расположено месторождение олова в Кыргызстане?",
+    a: "«Трудовая» — в долине Сары-Джаз"
+  },
+  {
+    q: "Какие источники энергии считаются традиционными, а какие — альтернативными?",
+    a: "Традиционные: газ, нефть, уголь, торф, дрова.\n\nАльтернативные: солнечная энергия, гидроэнергетика, ветер, геотермальные источники, энергия приливов и отливов."
+  },
+  {
+    q: "Какие природные условия необходимы для строительства ГЭС?",
+    a: "1) Наличие реки\n2) Большой уклон (перепад высот) — такие условия есть только в горных реках"
+  },
+  {
+    q: "Перечислите угольные бассейны и угленосные районы Кыргызстана.",
+    a: "Бассейны: Южно-Ферганский, Узгенский (Восточно-Ферганский), Северо-Ферганский, Кавакский.\n\nРайоны: Южно-Иссыккульский, Алайский, Алабуга-Чатыркельский."
+  },
+  {
+    q: "Для каких целей создаются национальные парки?",
+    a: "Охрана окружающей среды при ограниченной деятельности человека. В отличие от заповедников, в нацпарках разрешён туризм и ограниченная хозяйственная деятельность."
+  },
+  {
+    q: "Какие туристические направления (рекреационные ресурсы) имеются в Кыргызстане?",
+    a: "• Пляжный (рекреационный) — озеро Иссык-Куль\n• Активный — горы (альпинизм, пешеходный туризм)\n• Познавательный — историко-культурные памятники\n• Лечебно-оздоровительный — курорты, минеральные воды"
+  }
+];
+
+let order = [];
+let current = 0;
+let correctCount = 0;
+let wrongCount = 0;
+let answered = false;
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function restart() {
+  order = shuffle([...Array(questions.length).keys()]);
+  current = 0;
+  correctCount = 0;
+  wrongCount = 0;
+  answered = false;
+
+  document.getElementById('resultScreen').classList.add('hidden');
+  document.getElementById('quizCard').classList.remove('hidden');
+  document.querySelector('.stats').classList.remove('hidden');
+  document.querySelector('.progress-bar').classList.remove('hidden');
+
+  document.getElementById('correct').textContent = 0;
+  document.getElementById('wrong').textContent = 0;
+  document.getElementById('qTotal').textContent = questions.length;
+
+  showQuestion();
+}
+
+function showQuestion() {
+  answered = false;
+  const q = questions[order[current]];
+
+  document.getElementById('qLabel').textContent = `ВОПРОС ${current + 1} / ${questions.length}`;
+  document.getElementById('qNum').textContent = '';
+  document.getElementById('questionText').textContent = q.q;
+  document.getElementById('answerText').textContent = q.a;
+
+  const box = document.getElementById('answerBox');
+  box.classList.remove('visible');
+
+  document.getElementById('actionsA').classList.remove('hidden');
+  document.getElementById('actionsB').classList.add('hidden');
+
+  document.getElementById('qNum').textContent = current + 1;
+  document.getElementById('progressFill').style.width = `${(current / questions.length) * 100}%`;
+}
+
+function revealAnswer() {
+  document.getElementById('answerBox').classList.add('visible');
+  document.getElementById('actionsA').classList.add('hidden');
+  document.getElementById('actionsB').classList.remove('hidden');
+  answered = true;
+}
+
+function mark(isCorrect) {
+  if (isCorrect) {
+    correctCount++;
+    document.getElementById('correct').textContent = correctCount;
+  } else {
+    wrongCount++;
+    document.getElementById('wrong').textContent = wrongCount;
+  }
+  next();
+}
+
+function next() {
+  current++;
+  if (current >= questions.length) {
+    showResult();
+  } else {
+    showQuestion();
+  }
+}
+
+function showResult() {
+  document.getElementById('quizCard').classList.add('hidden');
+  document.querySelector('.stats').classList.add('hidden');
+  document.querySelector('.progress-bar').classList.add('hidden');
+
+  const total = questions.length;
+  const pct = Math.round((correctCount / total) * 100);
+
+  document.getElementById('scoreBig').innerHTML = `${correctCount} <span>/ ${total}</span>`;
+  
+  let msg = '';
+  if (pct >= 90) msg = 'Отлично! Ты настоящий эксперт по географии КР.';
+  else if (pct >= 70) msg = 'Хороший результат! Ещё немного практики — и будет отлично.';
+  else if (pct >= 50) msg = 'Неплохо, но стоит повторить материал.';
+  else msg = 'Нужно больше практики. Попробуй ещё раз!';
+
+  document.getElementById('resultMsg').textContent = `${pct}% правильных ответов. ${msg}`;
+  document.getElementById('resultScreen').classList.remove('hidden');
+}
+
+// Init
+restart();
+</script>
+</body>
+</html>

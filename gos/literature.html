@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="ky">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Кыргыз Адабияты — Тест</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d1410;
+    --card: #141d18;
+    --border: #22332a;
+    --accent: #34d399;
+    --accent2: #fbbf24;
+    --text: #e2e8f0;
+    --muted: #5a7060;
+    --wrong: #f87171;
+    --radius: 12px;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 16px;
+    gap: 24px;
+  }
+
+  header { text-align: center; }
+
+  header h1 {
+    font-family: 'Unbounded', sans-serif;
+    font-size: clamp(1.4rem, 4vw, 2.2rem);
+    color: var(--accent);
+    letter-spacing: -0.5px;
+  }
+
+  header p {
+    color: var(--muted);
+    font-size: 0.8rem;
+    margin-top: 6px;
+  }
+
+  .stats {
+    display: flex;
+    gap: 20px;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  .stats span b { color: var(--text); }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    width: 100%;
+    max-width: 680px;
+  }
+
+  .q-num {
+    font-size: 0.7rem;
+    color: var(--accent2);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+  }
+
+  .question {
+    font-family: 'Unbounded', sans-serif;
+    font-size: clamp(0.88rem, 2.5vw, 1.02rem);
+    line-height: 1.65;
+    color: var(--text);
+    margin-bottom: 28px;
+  }
+
+  .answer-box {
+    background: #080e0a;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px;
+    font-size: 0.88rem;
+    line-height: 1.75;
+    display: none;
+    white-space: pre-wrap;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .answer-box.visible { display: block; }
+
+  .answer-box .label {
+    font-size: 0.68rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .answer-box .answer-text { color: var(--text); }
+
+  .actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 22px;
+    flex-wrap: wrap;
+  }
+
+  button {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82rem;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 1px solid;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    letter-spacing: 0.5px;
+  }
+
+  .btn-reveal {
+    background: transparent;
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+  .btn-reveal:hover { background: var(--accent2); color: #000; }
+
+  .btn-correct {
+    background: transparent;
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .btn-correct:hover { background: var(--accent); color: #000; }
+
+  .btn-wrong {
+    background: transparent;
+    border-color: var(--wrong);
+    color: var(--wrong);
+  }
+  .btn-wrong:hover { background: var(--wrong); color: #000; }
+
+  .btn-next {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #000;
+    font-weight: 700;
+    margin-left: auto;
+  }
+  .btn-next:hover { opacity: 0.85; }
+
+  .progress-bar {
+    width: 100%;
+    max-width: 680px;
+    height: 4px;
+    background: var(--border);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    border-radius: 99px;
+    transition: width 0.4s ease;
+  }
+
+  .result-screen {
+    text-align: center;
+    max-width: 480px;
+  }
+
+  .result-screen h2 {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 1.8rem;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  .score-big {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 4rem;
+    color: var(--text);
+    line-height: 1;
+    margin: 20px 0;
+  }
+
+  .score-big span { color: var(--muted); font-size: 2rem; }
+
+  .result-screen p {
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin-bottom: 24px;
+  }
+
+  .btn-restart {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #000;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 14px 32px;
+  }
+  .btn-restart:hover { opacity: 0.85; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>КЫРГЫЗ АДАБИЯТЫ</h1>
+  <p>Адабият — тест суроолору</p>
+</header>
+
+<div class="stats">
+  <span>Суроо <b id="qNum">—</b> / <b id="qTotal">—</b></span>
+  <span>✓ <b id="correct">0</b></span>
+  <span>✗ <b id="wrong">0</b></span>
+</div>
+
+<div class="progress-bar">
+  <div class="progress-fill" id="progressFill" style="width:0%"></div>
+</div>
+
+<div class="card" id="quizCard">
+  <div class="q-num" id="qLabel">СУРОО</div>
+  <div class="question" id="questionText"></div>
+
+  <div class="answer-box" id="answerBox">
+    <span class="label">// жооп</span>
+    <div class="answer-text" id="answerText"></div>
+  </div>
+
+  <div class="actions" id="actionsA">
+    <button class="btn-reveal" onclick="revealAnswer()">👁 Жоопту көрсөт</button>
+  </div>
+
+  <div class="actions hidden" id="actionsB">
+    <button class="btn-correct" onclick="mark(true)">✓ Билдим</button>
+    <button class="btn-wrong" onclick="mark(false)">✗ Билбедим</button>
+    <button class="btn-next" onclick="next()">Кийинки →</button>
+  </div>
+</div>
+
+<div class="result-screen hidden" id="resultScreen">
+  <h2>Тест бүттү!</h2>
+  <div class="score-big" id="scoreBig">0 <span>/ 0</span></div>
+  <p id="resultMsg"></p>
+  <button class="btn-restart" onclick="restart()">↺ Кайра баштоо</button>
+</div>
+
+<script>
+const questions = [
+  {
+    q: "«Жүрөлүчү жүрөк оорутпай» драмасы кимдин калемине таандык?",
+    a: "Бексултан Жакиев"
+  },
+  {
+    q: "Айтматов 14 жашында кандай кызматта иштеген?",
+    a: "Айыл өкмөтүнүн катчысы"
+  },
+  {
+    q: "Ч. Айтматовдун «Бетме-бет» повестиндеги каармандар кимдер?",
+    a: "Ысмайыл, Сейде, Чоң эне, Тотой, Мырзакул ж.б."
+  },
+  {
+    q: "Ч. Айтматовдун аңгемелери кандай аталат?",
+    a: "«Гезитчик Дзюйо», «Ак жаан», «Түнкү сугат», «Асма көпүрө»"
+  },
+  {
+    q: "Ч. Айтматовдун согуш темасын чагылдырган чыгармалары кайсылар?",
+    a: "«Эрте келген турналар», «Бетме-бет», «Жамийла», «Саманчынын жолу»"
+  },
+  {
+    q: "Ч. Айтматовдун атын алгач алыска тааныткан чыгармасы кандай аталат? Аны «махабат тууралуу эң сонун баян» деп ким баалаган?",
+    a: "«Жамийла» повести Айтматовдун атын алыска тааныткан.\nФранцуз жазуучусу Луи Арагон бул чыгарманы «махабат тууралуу эң сонун баян» деп баалаган."
+  },
+  {
+    q: "«Атлес кейнек» аңгемесинин автору ким?",
+    a: "Топчугүл Шайдуллаева"
+  },
+  {
+    q: "Жусуп Баласагындын «Кут алчу билим» поэмасы кайсы жылдары жазылган?",
+    a: "1069–1070-жылдары"
+  },
+  {
+    q: "Барпы Алыкулов кайсы оору менен ооруган?",
+    a: "Козу азиз (1884–1949)"
+  },
+  {
+    q: "Барпы Алыкуловдун чыгармаларын атагыла.",
+    a: "«Гүл кыздар», «Мөлмөлүм», «Мырзайым», «Лөлүкан», «Буракжан», «Гөзал кыз», «Кара көз», «Ак дилбар», «Тартип», «Дилбарым», «Өзгөчөм», «Алтын», «Ак жылдыз», «Ала-Тоо коркко келбейт эл болбосо»"
+  },
+  {
+    q: "Жеңижоктун өз ысмы ким болгон?",
+    a: "Ото-Коко уулу"
+  },
+  {
+    q: "Жар-жар ыры качан ырдалат?",
+    a: "Кыз узатууда"
+  },
+  {
+    q: "Кошок ырлары кайсы учурда ырдалган?",
+    a: "Адам өлгөндө жана кыз узатууда"
+  },
+  {
+    q: "Жарамазан ыры кайсы убакта айтылган?",
+    a: "Орозо убагында"
+  },
+  {
+    q: "Эмгек ырларына кайсылар кирет?",
+    a: "«Оп майда», «Бекбекей», «Шырылдаң»"
+  },
+  {
+    q: "«Жүрөлүчү жүрөк оорутпай» драмасында абышканын канча баласы бар?",
+    a: "2 баласы"
+  },
+  {
+    q: "Алыкул Осмоновдун мекен жөнүндө жазган ыры кайсы?",
+    a: "«Ата-Журт»"
+  },
+  {
+    q: "Алыкул Осмонов кайсы балдар үйүндө тарбияланган?",
+    a: "Токмок"
+  },
+  {
+    q: "Алыкул Осмонов котормочу катары Шота Руставелинин кайсы чыгармасын которгон?",
+    a: "«Жолборс терисин жамынган баатыр»"
+  },
+  {
+    q: "Улуу Ата Мекендик согушка катышкан кыргыз акын-жазуучулары кимдер?",
+    a: "Жоомарт Боконбаев, Темиркул Үметалиев, Сооронбай Жусуев, Суйунбай Эралиев, Ташым Байжиев, Мукай Элебаев, Жусуп Турусбеков"
+  },
+  {
+    q: "«Эки ирет гүлдөөчү алмалар» чыгармасынын автору ким?",
+    a: "Мурза Гапаров"
+  },
+  {
+    q: "Эсенгул Ибраев кайсы сатиралык журналда иштеген?",
+    a: "«Чалкан» журналында"
+  },
+  {
+    q: "Эсенгул Ибраев поэзиядан башка кайсы жанрда эмгектерди жараткан?",
+    a: "Сатира"
+  },
+  {
+    q: "Кыргыз адабиятында сатира жанрында эмгектенген жазуучуларды атагыла.",
+    a: "Байдылда Сарногоев, Мидин Алыбаев, Райкан Шүкүрбеков"
+  },
+  {
+    q: "Чыңгыз Айтматовдун романдары кайсылар?",
+    a: "«Кылым карытар бир күн», «Кыямат», «Кассандра тамгасы», «Тоолор кулаганда»"
+  },
+  {
+    q: "Эне-Бейит жана маңкурт болуп кеткен Дененбай тууралуу уламышты Ч. Айтматов кайсы чыгармасында камтыган?",
+    a: "«Кылым карытар бир күн»"
+  },
+  {
+    q: "Жусуп Баласагын кайсы кылымда жашаган?",
+    a: "XI кылымда"
+  },
+  {
+    q: "Чыңгыз Айтматов качан жана кайда туулган?",
+    a: "1928-жылы 12-декабрда, Таласта, Шекер айылында"
+  },
+  {
+    q: "Чыңгыз Айтматовдун атасынын аты ким болгон?",
+    a: "Төрөкул Айтматов"
+  },
+  {
+    q: "Ч. Айтматовдун берулер жөнүндө баяндалган чыгармасы кандайча аталат?",
+    a: "«Кыямат»"
+  },
+  {
+    q: "Бостон жана Базарбай аттуу каармандар Ч. Айтматовдун кайсы чыгармасында учурайт?",
+    a: "«Кыямат»"
+  },
+  {
+    q: "«Ак кеме» повестиндеги баланын аты кинофильмде кандай?",
+    a: "Нургазы"
+  },
+  {
+    q: "«Ак кеме» повести алгач кандай аталган?",
+    a: "«Жомоктон кийин»"
+  },
+  {
+    q: "«Мүйүздүү бугу эне» жөнүндөгү уламыш Ч. Айтматовдун кайсы чыгармасында баяндалат?",
+    a: "«Ак кеме»"
+  },
+  {
+    q: "Жусуп Баласагындын «Кут алчу билим» поэмасында Өгдүлмүш ким болгон жана эмненин символу?",
+    a: "Өгдүлмүш — акылдын символу, увазирдин уулу."
+  },
+  {
+    q: "Ч. Айтматовдун эң акыркы чыгармасы кандайча аталат?",
+    a: "«Тоолор кулаганда»"
+  },
+  {
+    q: "Ч. Айтматов кайсы айылда туулган?",
+    a: "Шекер айылы, Талас"
+  },
+  {
+    q: "«Канткенде адам ___ адам болот». Ч. Айтматов. Бошту толтургула.",
+    a: "уулу\n(«Канткенде адам уулу адам болот»)"
+  },
+  {
+    q: "Чыңгыз Айтматов кайсы жылы кайтыш болгон?",
+    a: "2008-жылдын 10-июнунда, 80 жашта"
+  },
+  {
+    q: "Чыңгыз Айтматов алгачкы чыгармаларын кайсы тилде жазган?",
+    a: "Орусча"
+  },
+  {
+    q: "Момун аттуу каарман Ч. Айтматовдун кайсы чыгармасында учурайт?",
+    a: "«Ак кеме»"
+  },
+  {
+    q: "Илияс менен Асел Ч. Айтматовдун кайсы чыгармасында баяндалат?",
+    a: "«Делбирим»"
+  },
+  {
+    q: "Француз жазуучусу Луи Арагон «Махабат жөнүндө эң сонун баян» деп кайсы чыгарманы атаган?",
+    a: "«Жамийла» повести"
+  },
+  {
+    q: "«Адамга эң кыйыны күн сайын адам болуу» деген накыл кеп кимге таандык?",
+    a: "Чыңгыз Айтматов"
+  },
+  {
+    q: "Ч. Айтматовдун «Бетме-бет» повестинде Ысмайыл эмне үчүн энесин жерлегенге катышпай калат?",
+    a: "Ысмайыл согуштан качып, өз айылына жашыруун кайтып келип, үңкүрдө жашынып жүргөндүктөн."
+  },
+  {
+    q: "Жусуп Баласагындын «Кут алчу билим» поэмасындагы каармандарды атагыла.",
+    a: "Күнтууду, Айтолду, Өгдүлмүш, Одгурмуш"
+  },
+  {
+    q: "Алыкул Осмонов кайсы оорудан кайтыш болгон?",
+    a: "Кургак учук (туберкулёз)"
+  },
+  {
+    q: "«Кудайга миң мертебе калп айтсам да, ырыма бир мертебе калп айта албайм» — ыр саптары кайсы акындын калемине таандык?",
+    a: "Алыкул Осмонов"
+  },
+  {
+    q: "Улуттук боштондук кыймыл (Үркүн) кайсы жылы болгон?",
+    a: "1916-жылы"
+  },
+  {
+    q: "Үркүндө кыргыз эли кайсы жерге качкан?",
+    a: "Кытайга"
+  },
+  {
+    q: "Үркүн темасына арналган чыгармаларды атагыла.",
+    a: "А. Токомбаев — «Кандуу жылдар»\nМ. Элебаев — «Узак жол»\nК. Баялинов — «Ажар» повести"
+  },
+  {
+    q: "«Ак чүч» сатиралык чыгармасы кимдин калемине таандык?",
+    a: "Мидин Алыбаев"
+  },
+  {
+    q: "Байдылда Сарногоев, Мидин Алыбаев, Райкан Шүкүрбеков кыргыз адабиятынын кайсы жанрында эмгектенишкен?",
+    a: "Сатира"
+  },
+  {
+    q: "«Чалкан» деген эмне?",
+    a: "Журнал (сатиралык журнал)"
+  },
+  {
+    q: "Сатира дегени эмне?",
+    a: "Коомдук турмуштагы ошол чөйрөгө ылайык келбеген көрүнүштөрдү, адамдардын иш аракеттериндеги жагымсыз сапаттарды күлкүгө алып, сындаган чыгармалар."
+  },
+  {
+    q: "Махмуд Кашгаринин чыгармасы кандай аталат?",
+    a: "«Дивану лугати'т-түрк» («Түрк тилдеринин түшүндүрмө сөздүгү»)"
+  },
+  {
+    q: "Макалды толуктагыла: «Бир жакадан баш, бир жеңден...»",
+    a: "кол\n(«Бир жакадан баш, бир жеңден кол»)"
+  },
+  {
+    q: "Макалды толуктагыла: «Керегем сага айтам, келиним сен ук, үйүм сага айтам...»",
+    a: "уулум\n(«...уулум сен ук»)"
+  },
+  {
+    q: "Макалды толуктагыла: «Айдаганы беш эчки, ышкырыгы...»",
+    a: "таш жарат"
+  },
+  {
+    q: "Макалды толуктагыла: «Илим ийне менен...»",
+    a: "кудук казгандай"
+  },
+  {
+    q: "Макал-лакаптар фольклордун кайсы түрүнө кирет?",
+    a: "Дидактикалык түр"
+  },
+  {
+    q: "Жаңылмачтар фольклордун кайсы түрүнө кирет?",
+    a: "Дидактикалык түр"
+  },
+  {
+    q: "Табышмактар фольклордун кайсы түрүнө кирет?",
+    a: "Дидактикалык түр"
+  },
+  {
+    q: "Жомоктор фольклордун кайсы түрүнө кирет?",
+    a: "Эпикалык түр"
+  },
+  {
+    q: "Кенже эпостор фольклордун кайсы түрүнө кирет?",
+    a: "Эпикалык түр"
+  },
+  {
+    q: "Уламыштар фольклордун кайсы түрүнө кирет?",
+    a: "Эпикалык түр"
+  },
+  {
+    q: "Махмуд Кашгаринин сөздүгү кыргыз тилине которулганбы?",
+    a: "Ооба, которулган."
+  },
+  {
+    q: "Бексултан Жакиевдин «Жүрөлүчү жүрөк оорутпай» драмасындагы башкы каарман ким?",
+    a: "Карыя"
+  },
+  {
+    q: "Бексултан Жакиевдин «Жүрөлүчү жүрөк оорутпай» драмасындагы карыянын уулу ким болуп иштейт?",
+    a: "Таксист"
+  },
+  {
+    q: "Жазгыч акындар кайсы арип менен жазышкан?",
+    a: "Арап арибинде"
+  },
+  {
+    q: "«Ак чүч» деген сөз айкашы кандай адамга карата колдонулат?",
+    a: "Ак кол (сөз айкашы жомарт, берешен адамга карата айтылат)"
+  },
+  {
+    q: "Сардал аттуу каарман кайсы чыгармада учурайт?",
+    a: "Мурза Гапаров — «Эки ирет гүлдөөчү алмалар»"
+  },
+  {
+    q: "«Мөлмөлүм» ырынын автору ким?",
+    a: "Барпы Алыкулов"
+  },
+  {
+    q: "«Алакан» ырынын автору ким?",
+    a: "Сооронбай Жусуев"
+  },
+  {
+    q: "Жусуп Баласагын «Кут алчу билим» чыгармасы үчүн кандай наам алган?",
+    a: "Хас-хажиб"
+  },
+  {
+    q: "«Жылуу кийин, жолуң кыйын үшүрсүң...» ыр саптары кимдин калемине таандык?",
+    a: "Алыкул Осмонов — «Ата-Журт»"
+  },
+  {
+    q: "«Эки ирет гүлдөөчү алмалар» аңгемесинин аягы эмне менен бүтөт?",
+    a: "Күчүк менен кайтып үйүнө кетет."
+  },
+  {
+    q: "«Мен дүйнөнү апам менен тааныгам» ыры кимдин калемине таандык?",
+    a: "Фатима Абдалова"
+  },
+  {
+    q: "«Кайдыгерлик» ырынын автору ким?",
+    a: "Шайлообек Дүйшеев"
+  },
+  {
+    q: "Топчугүл Шайдуллаева кайсы университетте окуган?",
+    a: "Кыргыз Мамлекеттик Университет"
+  },
+  {
+    q: "«Атлес көйнөк» чыгармасында атасы менен кызы кайсы базарга барышат?",
+    a: "Исфара базарына"
+  },
+  {
+    q: "«Атлес көйнөк» чыгармасында атасы менен кызы базарга эмне алып барып сатышат?",
+    a: "Кап өрүк"
+  },
+  {
+    q: "«Атлес көйнөк» чыгармасы кандай аңгеме?",
+    a: "Топчугүл Шайдуллаеванын аңгемеси. Анда кичинекей кыздын атлас көйнөккө болгон кыялы жана ошол кыялды орундатуу үчүн атасы менен болгон сапары баяндалат."
+  },
+  {
+    q: "«Атлес көйнөк» чыгармасында атасы базарга барганда эмнени жактырбай калган?",
+    a: "Ызы-чууну"
+  },
+  {
+    q: "«Атлес көйнөк» чыгармасында атасы өрүктү эмнеге салып барат?",
+    a: "Капка"
+  },
+  {
+    q: "Фатима Абдалова кайсы темада ырларды көбүрөөк жазат?",
+    a: "Апа жөнүндө"
+  },
+  {
+    q: "Фатима Абдалова кайсы университетте окуган?",
+    a: "Кыргыз Мамлекеттик Университет"
+  },
+  {
+    q: "Фатима Абдалова кайсы жерде туулган?",
+    a: "Жалал-Абад областы, Базар-Коргон район"
+  },
+  {
+    q: "Фатима Абдалова азыр кайсы жерде иштейт?",
+    a: "«Азаттык» медиа институтунда"
+  },
+  {
+    q: "Фатима Абдалованын кесиби кандай?",
+    a: "Журналист"
+  },
+  {
+    q: "«Улут болсом тилим менен улутмун» чыгармасы кимдин калемине таандык?",
+    a: "Эсенгул Ибраев"
+  },
+  {
+    q: "Эсенгул Ибраев кайсы журналда көбүрөөк иштеген?",
+    a: "«Чалкан» журналында"
+  }
+];
+
+let order = [];
+let current = 0;
+let correctCount = 0;
+let wrongCount = 0;
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function restart() {
+  order = shuffle([...Array(questions.length).keys()]);
+  current = 0;
+  correctCount = 0;
+  wrongCount = 0;
+
+  document.getElementById('resultScreen').classList.add('hidden');
+  document.getElementById('quizCard').classList.remove('hidden');
+  document.querySelector('.stats').classList.remove('hidden');
+  document.querySelector('.progress-bar').classList.remove('hidden');
+
+  document.getElementById('correct').textContent = 0;
+  document.getElementById('wrong').textContent = 0;
+  document.getElementById('qTotal').textContent = questions.length;
+
+  showQuestion();
+}
+
+function showQuestion() {
+  const q = questions[order[current]];
+
+  document.getElementById('qLabel').textContent = `СУРОО ${current + 1} / ${questions.length}`;
+  document.getElementById('questionText').textContent = q.q;
+  document.getElementById('answerText').textContent = q.a;
+
+  document.getElementById('answerBox').classList.remove('visible');
+  document.getElementById('actionsA').classList.remove('hidden');
+  document.getElementById('actionsB').classList.add('hidden');
+
+  document.getElementById('qNum').textContent = current + 1;
+  document.getElementById('progressFill').style.width = `${(current / questions.length) * 100}%`;
+}
+
+function revealAnswer() {
+  document.getElementById('answerBox').classList.add('visible');
+  document.getElementById('actionsA').classList.add('hidden');
+  document.getElementById('actionsB').classList.remove('hidden');
+}
+
+function mark(isCorrect) {
+  if (isCorrect) {
+    correctCount++;
+    document.getElementById('correct').textContent = correctCount;
+  } else {
+    wrongCount++;
+    document.getElementById('wrong').textContent = wrongCount;
+  }
+  next();
+}
+
+function next() {
+  current++;
+  if (current >= questions.length) {
+    showResult();
+  } else {
+    showQuestion();
+  }
+}
+
+function showResult() {
+  document.getElementById('quizCard').classList.add('hidden');
+  document.querySelector('.stats').classList.add('hidden');
+  document.querySelector('.progress-bar').classList.add('hidden');
+
+  const total = questions.length;
+  const pct = Math.round((correctCount / total) * 100);
+
+  document.getElementById('scoreBig').innerHTML = `${correctCount} <span>/ ${total}</span>`;
+
+  let msg = '';
+  if (pct >= 90) msg = 'Мыкты! Сен чыныгы адабият билермени!';
+  else if (pct >= 70) msg = 'Жакшы натыйжа! Дагы бир аз машыгуу жетишет.';
+  else if (pct >= 50) msg = 'Болбогон эмес, бирок материалды кайталоо керек.';
+  else msg = 'Дагы машыгуу керек. Кайра байкап көр!';
+
+  document.getElementById('resultMsg').textContent = `${pct}% туура жооп. ${msg}`;
+  document.getElementById('resultScreen').classList.remove('hidden');
+}
+
+restart();
+</script>
+</body>
+</html>
