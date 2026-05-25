@@ -1,1 +1,376 @@
 
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GOS EXAM — Тесты</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;700;900&family=IBM+Plex+Mono:wght@300;400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #080a0f;
+    --text: #e8eaf0;
+    --muted: #3a3f52;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .hero {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 24px 60px;
+    text-align: center;
+    gap: 20px;
+  }
+
+  .badge {
+    font-size: 0.65rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--muted);
+    border: 1px solid var(--muted);
+    padding: 5px 14px;
+    border-radius: 99px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  /* ---- BIG TITLE ---- */
+  .title-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+
+  .title-line {
+    display: flex;
+    align-items: center;
+    /* no gap so logo sits flush between G and S */
+    gap: 0;
+    line-height: 1;
+  }
+
+  .t {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 900;
+    font-size: clamp(3rem, 10vw, 6.5rem);
+    letter-spacing: -3px;
+    line-height: 1;
+    background: linear-gradient(135deg, #818cf8, #f472b6, #34d399, #fbbf24);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Logo placeholder — same size as one letter */
+  .logo-slot {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    /* width = height = cap-height of the font ~ 0.72 * font-size */
+    width: clamp(2.6rem, 8.8vw, 5.6rem);
+    height: clamp(2.6rem, 8.8vw, 5.6rem);
+    border-radius: 50%;
+    border: 2px dashed #ffffff25;
+    background: #ffffff06;
+    flex-shrink: 0;
+    overflow: hidden;
+    position: relative;
+    /* nudge down slightly to optical-align with caps */
+    margin-top: clamp(0.4rem, 1.4vw, 0.9rem);
+    transition: border-color 0.3s;
+  }
+
+  .logo-slot:hover { border-color: #818cf860; }
+
+  .logo-slot span {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: clamp(0.28rem, 0.8vw, 0.44rem);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #3a3f5280;
+    text-align: center;
+    line-height: 1.5;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .hero p {
+    font-size: 0.82rem;
+    color: var(--muted);
+    letter-spacing: 1px;
+    animation: fadeUp 0.6s 0.2s ease both;
+    max-width: 420px;
+  }
+
+  /* ---- GRID ---- */
+  .grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  .card {
+    position: relative;
+    border-radius: 16px;
+    padding: 32px 28px;
+    text-decoration: none;
+    color: var(--text);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    animation: fadeUp 0.5s ease both;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    border: 1px solid transparent;
+  }
+
+  .card:nth-child(1) { animation-delay: 0.25s; }
+  .card:nth-child(2) { animation-delay: 0.35s; }
+  .card:nth-child(3) { animation-delay: 0.45s; }
+  .card:nth-child(4) { animation-delay: 0.55s; }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .card:hover { transform: translateY(-6px); }
+  .card:hover::before { opacity: 1; }
+
+  .card-geo {
+    background: linear-gradient(135deg, #0f1f18 0%, #0a1510 100%);
+    border-color: #1a3a28;
+    box-shadow: 0 0 0 1px #1a3a28, 0 8px 40px #34d39910;
+  }
+  .card-geo::before { background: radial-gradient(circle at 80% 20%, #34d39918 0%, transparent 60%); }
+  .card-geo:hover { box-shadow: 0 0 0 1px #34d399, 0 20px 60px #34d39930; }
+  .card-geo .card-icon { color: #34d399; }
+  .card-geo .card-tag { background: #34d39920; color: #34d399; border-color: #34d39940; }
+  .card-geo .card-arrow { color: #34d399; }
+
+  .card-hist {
+    background: linear-gradient(135deg, #1a0f1f 0%, #110a18 100%);
+    border-color: #3a1a50;
+    box-shadow: 0 0 0 1px #3a1a50, 0 8px 40px #c084fc10;
+  }
+  .card-hist::before { background: radial-gradient(circle at 80% 20%, #c084fc18 0%, transparent 60%); }
+  .card-hist:hover { box-shadow: 0 0 0 1px #c084fc, 0 20px 60px #c084fc30; }
+  .card-hist .card-icon { color: #c084fc; }
+  .card-hist .card-tag { background: #c084fc20; color: #c084fc; border-color: #c084fc40; }
+  .card-hist .card-arrow { color: #c084fc; }
+
+  .card-lit {
+    background: linear-gradient(135deg, #1f180a 0%, #160f05 100%);
+    border-color: #3a2a0a;
+    box-shadow: 0 0 0 1px #3a2a0a, 0 8px 40px #fbbf2410;
+  }
+  .card-lit::before { background: radial-gradient(circle at 80% 20%, #fbbf2418 0%, transparent 60%); }
+  .card-lit:hover { box-shadow: 0 0 0 1px #fbbf24, 0 20px 60px #fbbf2430; }
+  .card-lit .card-icon { color: #fbbf24; }
+  .card-lit .card-tag { background: #fbbf2420; color: #fbbf24; border-color: #fbbf2440; }
+  .card-lit .card-arrow { color: #fbbf24; }
+
+  .card-lang {
+    background: linear-gradient(135deg, #0f1020 0%, #090b18 100%);
+    border-color: #1a1f40;
+    box-shadow: 0 0 0 1px #1a1f40, 0 8px 40px #818cf810;
+  }
+  .card-lang::before { background: radial-gradient(circle at 80% 20%, #818cf818 0%, transparent 60%); }
+  .card-lang:hover { box-shadow: 0 0 0 1px #818cf8, 0 20px 60px #818cf830; }
+  .card-lang .card-icon { color: #818cf8; }
+  .card-lang .card-tag { background: #818cf820; color: #818cf8; border-color: #818cf840; }
+  .card-lang .card-arrow { color: #818cf8; }
+
+  .card-icon { font-size: 2.4rem; line-height: 1; }
+
+  .card-label {
+    font-size: 0.6rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: -8px;
+  }
+
+  .card-title {
+    font-family: 'Unbounded', sans-serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .card-desc {
+    font-size: 0.75rem;
+    color: #64748b;
+    line-height: 1.6;
+    flex: 1;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 4px;
+  }
+
+  .card-tag {
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+    padding: 4px 10px;
+    border-radius: 99px;
+    border: 1px solid;
+    text-transform: uppercase;
+  }
+
+  .card-arrow {
+    font-size: 1.2rem;
+    transition: transform 0.2s ease;
+  }
+
+  .card:hover .card-arrow { transform: translateX(4px); }
+
+  footer {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 0 24px 40px;
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="badge">Кыргызстан · Государственный экзамен · 2026</div>
+
+  <div class="title-block">
+    <div class="title-line">
+      <span class="t">G</span>
+      <div class="logo-slot">
+        <img src="logo.png" alt="GOS EXAM Logo" width="80" height="80">
+      </div>
+      <span class="t">S</span>
+    </div>
+    <div class="title-line">
+      <span class="t">EXAM</span>
+    </div>
+  </div>
+
+  <p>Выберите предмет, подготовьте вопросы и будь готов к экзамену</p>
+</section>
+
+<div class="grid">
+
+  <a class="card card-geo" href="geography.html">
+    <div class="card-icon">🌍</div>
+    <div>
+      <div class="card-label">Предмет 01</div>
+      <div class="card-title">ГЕОГРАФИЯ</div>
+    </div>
+    <div class="card-desc">
+      Природа, рельеф, климат, водные ресурсы, население и экономика Кыргызстана — 54 вопроса.
+    </div>
+    <div class="card-footer">
+      <span class="card-tag">54 вопроса</span>
+      <span class="card-arrow">→</span>
+    </div>
+  </a>
+
+  <a class="card card-hist" href="history.html">
+    <div class="card-icon">📜</div>
+    <div>
+      <div class="card-label">Предмет 02</div>
+      <div class="card-title">ИСТОРИЯ</div>
+    </div>
+    <div class="card-desc">
+      История Кыргызстана от древних времён до современности — 80 вопросов.
+    </div>
+    <div class="card-footer">
+      <span class="card-tag">80 вопросов</span>
+      <span class="card-arrow">→</span>
+    </div>
+  </a>
+
+  <a class="card card-lit" href="literature.html">
+    <div class="card-icon">📖</div>
+    <div>
+      <div class="card-label">Предмет 03</div>
+      <div class="card-title">КЫРГ. ЛИТЕРАТУРА</div>
+    </div>
+    <div class="card-desc">
+      Айтматов, Осмонов, Баласагын и другие кыргызские писатели — 98 вопросов.
+    </div>
+    <div class="card-footer">
+      <span class="card-tag">98 вопросов</span>
+      <span class="card-arrow">→</span>
+    </div>
+  </a>
+
+  <a class="card card-lang" href="kyrgyz.html">
+    <div class="card-icon">🗣️</div>
+    <div>
+      <div class="card-label">Предмет 04</div>
+      <div class="card-title">КЫРГЫЗСКИЙ ЯЗЫК</div>
+    </div>
+    <div class="card-desc">
+      Лексика, грамматика, фразеологизмы, словарный состав и деловые бумаги — 80 вопросов.
+    </div>
+    <div class="card-footer">
+      <span class="card-tag">80 вопросов</span>
+      <span class="card-arrow">→</span>
+    </div>
+  </a>
+
+</div>
+
+<footer>
+  © 2026 · Материалы для подготовки к государственному экзамену
+</footer>
+
+</body>
+</html>
