@@ -1,260 +1,496 @@
 <!doctype html>
-<html lang="ru" data-theme="dark">
+<html lang="ru">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Rate my Ala-Too</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f4f2ed">
+<title>RateMyAlatoo ★ Home</title>
+<link rel="icon" href="favicon.ico" sizes="96x96">
+<link rel="icon" href="favicon.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="favicon.png">
+<meta name="description" content="Анонимный рейтинг преподавателей и полезные разделы для студентов Ала-Тоо.">
+<style>
+:root{
+  --paper:#f4f2ed;--surface:#fffefa;--surface-2:#ebe8df;--ink:#202522;
+  --muted:#737970;--line:#d9d8cf;--green:#294b3b;--green-2:#3d6651;
+  --orange:#c46a43;--shadow:0 14px 38px rgba(34,42,35,.07);
+  --serif:Georgia,"Times New Roman",serif;
+  --sans:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.55 var(--sans);padding-bottom:100px}
+a{color:inherit}
+button{font:inherit;color:inherit}
+.wrap{width:min(1100px,calc(100% - 44px));margin:0 auto}
+.topbar{border-bottom:1px solid var(--line);background:rgba(244,242,237,.92)}
+.topbar-inner{height:76px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;font-weight:800;letter-spacing:-.04em;font-size:19px}
+.brand-mark{width:34px;height:34px;border-radius:10px;background:var(--green);color:#fff;display:grid;place-items:center;font:700 18px var(--serif)}
+.brand span:last-child{color:var(--green)}
+.top-right{display:flex;align-items:center;gap:18px;color:var(--muted);font-size:13px}
+.group-button{border:1px solid var(--line);background:var(--surface);padding:9px 13px;border-radius:7px;cursor:pointer}
+.group-button b{color:var(--green);margin-left:5px}
+main{padding-top:34px}
+.eyebrow{display:flex;align-items:center;gap:10px;color:var(--green);font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+.eyebrow:before{content:"";width:24px;height:1px;background:var(--orange)}
+.hero{display:grid;grid-template-columns:1fr auto;gap:30px;align-items:end;margin-bottom:30px}
+h1{font:400 clamp(38px,5.5vw,62px)/1.02 var(--serif);letter-spacing:-.045em;margin:14px 0 10px;max-width:700px}
+.hero-copy{max-width:570px;color:var(--muted);font-size:15px;margin:0}
+.date-stamp{font:italic 15px var(--serif);color:var(--muted);padding-bottom:7px;white-space:nowrap}
+.schedule-card{background:var(--green);color:#f8f7f1;border-radius:13px;padding:24px 27px 22px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.schedule-card:after{content:"";position:absolute;width:260px;height:260px;border:1px solid rgba(255,255,255,.11);border-radius:50%;right:-100px;top:-130px;box-shadow:0 0 0 26px rgba(255,255,255,.025),0 0 0 54px rgba(255,255,255,.02);pointer-events:none}
+.schedule-head{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:20px;position:relative;z-index:1}
+.schedule-kicker{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:#c2d0c5;font-weight:800}
+.schedule-head a{font-size:12px;color:#e7ede7;text-underline-offset:3px}
+.schedule-content{position:relative;z-index:1}
+.schedule-empty{color:#d4ddd5;font-size:14px;padding:12px 0 6px}
+.rows{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.it{min-width:0}
+.it+.it{border-left:1px solid rgba(255,255,255,.2);padding-left:24px}
+.lab{font-size:12px;color:#c2d0c5;display:flex;align-items:center;gap:8px}
+.lab.now:before{content:"";width:7px;height:7px;border-radius:50%;background:#e18b65;box-shadow:0 0 0 4px rgba(225,139,101,.14)}
+.tm{font:400 42px/1.1 var(--serif);margin:7px 0 5px;letter-spacing:-.03em}
+.it.nx .tm{font-size:30px;color:#c8d4ca}
+.nm{font-size:15px;line-height:1.4;max-width:440px;overflow-wrap:anywhere}
+.it.nx .nm{font-size:13px;color:#c8d4ca}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:20px;margin:42px 0 15px}
+.section-head h2{font:400 29px/1.1 var(--serif);letter-spacing:-.025em;margin:0}
+.section-note{font-size:12px;color:var(--muted)}
+.feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}
+.feature{display:flex;flex-direction:column;min-height:178px;text-decoration:none;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:19px 19px 16px;transition:transform .2s,border-color .2s,box-shadow .2s}
+.feature:hover{transform:translateY(-3px);border-color:#aeb9ae;box-shadow:var(--shadow)}
+.feature-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
+.feature-icon{width:34px;height:34px;border-radius:9px;background:#e8eee8;color:var(--green);display:grid;place-items:center}
+.feature-icon svg{width:18px;height:18px}
+.feature-arrow{color:var(--muted);font-size:19px}
+.feature-title{font:400 22px/1.15 var(--serif);margin:0 0 7px}
+.feature-desc{font-size:12px;color:var(--muted);margin:0;max-width:260px}
+.feature-meta{margin-top:auto;padding-top:14px;color:var(--green);font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+.more-section{margin-top:39px}
+.more-list{display:grid;grid-template-columns:repeat(2,1fr);border-top:1px solid var(--line)}
+.more-link{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:15px 5px;border-bottom:1px solid var(--line);text-decoration:none}
+.more-link:nth-child(odd){margin-right:20px}
+.more-link:nth-child(even){margin-left:20px}
+.more-link:hover .more-title{color:var(--green)}
+.more-title{font:400 18px var(--serif)}
+.more-desc{font-size:11px;color:var(--muted);display:block;margin-top:2px}
+.more-arrow{color:var(--green);font-size:18px}
+footer{margin-top:48px;padding:19px 0 28px;border-top:1px solid var(--line);color:var(--muted);font-size:11px;display:flex;justify-content:space-between;gap:20px}
+footer a{text-underline-offset:3px}
+.bottom-nav{position:fixed;z-index:20;left:50%;transform:translateX(-50%);bottom:max(14px,env(safe-area-inset-bottom));width:min(540px,calc(100% - 28px));padding:7px;background:rgba(32,37,34,.96);border:1px solid rgba(255,255,255,.12);border-radius:13px;box-shadow:0 12px 35px rgba(20,28,22,.22);display:grid;grid-template-columns:repeat(4,1fr);gap:4px;backdrop-filter:blur(14px)}
+.nav-item{min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:8px 3px;border-radius:8px;color:#c3cbc4;text-decoration:none;font-size:10px;font-weight:650;letter-spacing:.01em;transition:background .2s,color .2s}
+.nav-item svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.nav-item:hover,.nav-item.active{background:#3c5a48;color:#fff}
+.nav-item.active:after{content:"";position:absolute}
+.dialog-backdrop{position:fixed;inset:0;background:rgba(20,26,22,.55);z-index:40;display:none;align-items:flex-end;justify-content:center;padding:16px}
+.dialog-backdrop.open{display:flex}
+.sheet{width:min(520px,100%);max-height:min(78vh,650px);overflow:auto;background:var(--surface);border-radius:15px;padding:24px;box-shadow:0 20px 70px rgba(0,0,0,.25)}
+.sheet-head{display:flex;justify-content:space-between;align-items:center;gap:15px}
+.sheet h3{font:400 27px var(--serif);margin:0}
+.close{border:1px solid var(--line);border-radius:7px;background:transparent;padding:6px 10px;cursor:pointer}
+.sheet p{font-size:13px;color:var(--muted);margin:8px 0 18px}
+.dept{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:17px 0 8px}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chips button{border:1px solid var(--line);background:var(--paper);border-radius:6px;padding:7px 12px;font-size:13px;cursor:pointer}
+.chips button.on,.chips button:hover{background:var(--green);color:white;border-color:var(--green)}
+.how{display:flex;align-items:center;gap:9px;margin:0 0 20px;font:italic 15px var(--serif);color:var(--muted)}
+.how a{font-style:normal;color:var(--green);font-weight:700;text-decoration-thickness:1px;text-underline-offset:4px}
+.note{color:#d4ddd5;padding:10px 0}
+@media(max-width:700px){
+ .wrap{width:calc(100% - 32px)}.topbar-inner{height:65px}.top-right>span{display:none}
+ main{padding-top:26px}.hero{display:block;margin-bottom:22px}h1{font-size:43px}.date-stamp{margin-top:15px}
+ .schedule-card{padding:19px 18px}.rows{grid-template-columns:1fr;gap:15px}.it+.it{border-left:0;border-top:1px solid rgba(255,255,255,.2);padding:14px 0 0}
+ .tm{font-size:36px}.it.nx .tm{font-size:27px}
+ .feature-grid{grid-template-columns:repeat(2,1fr);gap:9px}.feature{min-height:166px;padding:15px}.feature-title{font-size:19px}
+ .section-head{margin-top:34px}.section-head h2{font-size:26px}.section-note{display:none}
+ .more-list{grid-template-columns:1fr}.more-link:nth-child(n){margin:0}
+ footer{display:block;line-height:1.8}
+}
+@media(max-width:390px){.feature-grid{grid-template-columns:1fr}.feature{min-height:145px}.feature-top{margin-bottom:12px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
 
-  <link rel="icon" href="favicon.ico" sizes="96x96">
-  <link rel="icon" href="favicon.png" sizes="192x192" type="image/png">
-  <link rel="apple-touch-icon" href="favicon.png">
+.topbar-inner{height:72px;gap:22px}
+.brand{gap:0;min-width:190px}
+.brand-logo{display:block;width:auto;height:38px;max-width:190px;object-fit:contain}
+.brand-fallback{display:none;font:700 20px var(--serif);letter-spacing:-.04em;color:var(--green)}
+.brand-logo[hidden]+.brand-fallback{display:block}
+.top-right{margin-left:auto}
+.group-button{font-size:12px;padding:8px 11px;border-radius:8px}
+.how{display:flex;align-items:center;justify-content:center;gap:9px;margin:0;white-space:nowrap;padding:8px 13px;border:1px solid #d6c99f;border-radius:999px;background:linear-gradient(135deg,#fffdf5,#e9e2ce);color:#374a3c;box-shadow:0 3px 12px rgba(93,82,48,.10);font:inherit;position:relative}
+.how:before{content:"✦";color:#b18445;font-size:13px}
+.how-label{font:700 12px var(--sans);color:#667064}
+.how a{font-size:12px;font-weight:750;color:#294b3b;text-decoration:none;max-width:220px;overflow:hidden;text-overflow:ellipsis}
+.how a:hover{text-decoration:underline;text-underline-offset:3px}
+.how-arrow{width:34px;height:18px;overflow:visible;flex:none}
+.how-arrow path{fill:none;stroke:#9a7945;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:60;stroke-dashoffset:60;animation:howDraw 2.8s ease-in-out infinite}
+@keyframes howDraw{0%,10%{stroke-dashoffset:60;opacity:.35}55%,85%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:0;opacity:.3}}
+main{padding-top:24px}
+.hero{margin-bottom:21px;align-items:center;grid-template-columns:1fr auto}
+h1{font-size:clamp(34px,4.2vw,48px);line-height:1.04;margin:10px 0 8px;max-width:650px}
+.hero-copy{font-size:14px;max-width:530px;line-height:1.45}
+.hero-actions{display:flex;flex-direction:column;align-items:flex-end;gap:11px}
+.hero-cta{display:inline-flex;align-items:center;gap:19px;padding:11px 16px;border-radius:8px;background:#dfe7d6;color:#294b3b;border:1px solid #c4d0bc;text-decoration:none;font-size:12px;font-weight:800;transition:background .2s,transform .2s}
+.hero-cta:hover{background:#d2dfc7;transform:translateY(-1px)}
+.hero-cta span{font-size:17px}
+.date-stamp{font-size:12px;padding:0}
+.schedule-card{padding:19px 23px 17px}
+.section-head{margin:31px 0 12px}
+.section-head h2{font-size:25px}
+.feature-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.feature{padding:0 0 17px;overflow:hidden;min-height:0;position:relative}
+.feature-art{height:150px;overflow:hidden;background:#27382f}
+.feature-art img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .45s ease}
+.feature:hover .feature-art img{transform:scale(1.045)}
+.feature-top{position:absolute;top:12px;left:13px;right:13px;margin:0;align-items:flex-start}
+.feature-icon{background:rgba(250,248,239,.94);box-shadow:0 3px 12px rgba(0,0,0,.12)}
+.feature-arrow{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:rgba(25,36,29,.68);color:#fff}
+.feature-title{font-size:21px;margin:15px 17px 5px}
+.feature-desc{font-size:12px;margin:0 17px;max-width:300px}
+.feature-meta{margin:0 17px;padding-top:12px;font-size:10px}
+.more-section{margin-top:28px}
+footer{margin-top:35px}
+@media(max-width:700px){
+ .topbar-inner{height:64px;gap:8px}
+ .brand{min-width:0}.brand-logo{height:31px;max-width:125px}
+ .how{gap:5px;padding:7px 8px;max-width:52vw}
+ .how-label{font-size:10px}.how a{font-size:10px;max-width:105px}.how-arrow{width:22px}
+ .top-right{gap:0}.group-button{font-size:10px;padding:7px 8px;max-width:115px}
+ main{padding-top:20px}.hero{display:flex;align-items:flex-start;gap:12px}
+ h1{font-size:35px;max-width:440px}.hero-copy{font-size:13px}
+ .hero-actions{align-items:flex-start;gap:9px;padding-top:8px}
+ .hero-cta{font-size:0;padding:10px 12px;gap:0}.hero-cta span{font-size:18px}
+ .date-stamp{font-size:10px;white-space:normal;text-align:right;max-width:105px}
+ .schedule-card{padding:17px 16px}
+ .feature-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ .feature-art{height:112px}.feature-title{font-size:18px;margin:12px 13px 5px}
+ .feature-desc{font-size:11px;margin:0 13px}.feature-meta{margin:0 13px}
+}
+@media(max-width:430px){
+ .topbar-inner{gap:5px}.brand-logo{height:27px;max-width:95px}
+ .how{max-width:49vw;padding:6px 7px}.how a{max-width:82px}
+ .group-button{font-size:9px;padding:6px}
+ .hero{display:block}.hero-actions{flex-direction:row;align-items:center;justify-content:space-between;padding-top:12px}
+ .hero-cta{font-size:11px;padding:9px 12px;gap:10px}.date-stamp{max-width:none;text-align:right}
+ .feature-grid{grid-template-columns:1fr}
+ .feature-art{height:145px}
+}
+@media(prefers-reduced-motion:reduce){.how-arrow path{animation:none;stroke-dashoffset:0}}
 
-  <link rel="stylesheet" href="landing.css">
-  <meta name="description" content="Анонимный рейтинг преподавателей. Реальные отзывы студентов, оценки, строгость и полезные теги. Помогает выбрать курс.">
+</style>
 </head>
-
 <body>
+<header class="topbar">
+ <div class="wrap topbar-inner">
+  <a class="brand" href="./" aria-label="RateMyAlatoo — главная"><img class="brand-logo" src="logo.png" alt="RateMyAlatoo" onerror="this.hidden=true"><span class="brand-fallback">RateMyAlatoo</span></a>
+  <div class="how" id="how" hidden><span class="how-label">Как насчёт</span>
+    <a id="howLink" href="#">проверить расписание?</a>
+    <svg class="how-arrow" viewBox="0 0 42 22" aria-hidden="true">
+      <path d="M2 17 C12 1 25 1 35 10 M27 3 L36 10 L27 15"/></svg></div>
+  <div class="top-right"><button class="group-button" id="groupButton" type="button">Группа <b id="groupLabel">не выбрана</b></button></div>
+ </div>
+</header>
+<main class="wrap">
+ <div class="hero">
+  <div>
+   <div class="eyebrow">Студенческий портал Ala-Too</div>
+   <h1>Учёба проще,<br>когда всё под рукой.</h1>
+   <p class="hero-copy">Расписание, отзывы и полезные материалы университета — в одном месте.</p>
+  </div>
+  <div class="hero-actions"><div class="date-stamp" id="todayStamp">Академический портал</div></div>
+ </div>
 
-  <header class="topbar">
-    <div class="wrap topbar__row">
-      <a class="brand" href="index.html" aria-label="Главная">
-        <img class="brand__logo" src="logo.png" alt="Logo" onerror="this.style.display='none'">
-        <div class="brand__text">
-          <div class="brand__title">Rate my Ala-Too</div>
-          <div class="brand__subtitle">Рейтинги преподавателей</div>
-        </div>
-      </a>
+ <section class="schedule-card" aria-live="polite">
+  <div class="schedule-head"><span class="schedule-kicker" id="wTitle">Расписание · на сегодня</span><a id="wMore" href="schedule.html">Открыть расписание ↗</a></div>
+  <div class="schedule-content" id="now"><div class="schedule-empty">Загружаем расписание…</div></div>
+ </section>
 
-      <div class="topbar__actions topbar__actions--desktop">
-        <button class="iconToggle" id="themeToggleDesktop" type="button" aria-label="Сменить тему" title="Сменить тему">
-          <span class="iconToggle__icon" aria-hidden="true" id="themeIconDesktop"></span>
-          <span class="iconToggle__text" id="themeLabelDesktop">Тёмная</span>
-        </button>
-        <a class="btn btn--primary" href="app.html">Перейти к преподавателям</a>
-      </div>
+ <div class="section-head"><h2>Основные разделы</h2><span class="section-note">Быстрый доступ к инструментам</span></div>
+ <section class="feature-grid" id="primaryPages" aria-label="Основные разделы"></section>
 
-      <button class="mMenuBtn" id="mMenuBtn" type="button"
-              aria-label="Открыть меню" aria-expanded="false" aria-controls="mMenu">
-        <span class="mMenuBtn__icon" aria-hidden="true">☰</span>
-      </button>
-    </div>
-  </header>
+ <section class="more-section">
+  <div class="section-head"><h2>Ещё на сайте</h2><span class="section-note">Справка и дополнительные материалы</span></div>
+  <div class="more-list" id="morePages"></div>
+ </section>
+ <footer>
+  <span>RateMyAlatoo · Студенческий портал</span>
+  <span>Данные расписания берутся из <a href="https://docs.google.com/spreadsheets/d/1EKBtXh6KMGzqrgh8P_x1-gIwkV5sP6TFfyH-fHMpiOI/edit" target="_blank" rel="noopener">оригинальной таблицы университета</a>.</span>
+ </footer>
+</main>
 
-  <div class="mOverlay" id="mOverlay" hidden></div>
+<nav class="bottom-nav" aria-label="Основная навигация">
+ <a class="nav-item active" href="./" data-nav="home"><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-6v-7h-4v7H4a1 1 0 0 1-1-1z"/></svg><span>Главная</span></a>
+ <a class="nav-item" href="schedule.html" data-nav="schedule"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 9h18M8 13h3M8 17h7"/></svg><span>Расписание</span></a>
+ <a class="nav-item" href="app.html" data-nav="teachers"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20v-1a6 6 0 0 1 12 0v1M16 5a3 3 0 0 1 0 6M18 14a5 5 0 0 1 3 5v1"/></svg><span>Преподаватели</span></a>
+ <button class="nav-item" id="moreNav" type="button" style="border:0;background:transparent;cursor:pointer"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><path d="M5 12h.01M12 12h.01M19 12h.01"/></svg><span>Ещё</span></button>
+</nav>
 
-  <aside class="mMenu" id="mMenu" hidden aria-label="Мобильное меню">
-    <div class="mMenu__head">
-      <div class="mMenu__brand">
-        <div class="mMenu__title">Rate my Ala-Too</div>
-        <div class="mMenu__sub muted">Рейтинги преподавателей</div>
-      </div>
-      <button class="mClose" id="mClose" type="button" aria-label="Закрыть меню">✕</button>
-    </div>
+<div class="dialog-backdrop" id="groupOverlay">
+ <section class="sheet" role="dialog" aria-modal="true" aria-labelledby="groupTitle">
+  <div class="sheet-head"><h3 id="groupTitle">Выберите свою группу</h3><button class="close" id="dlgX" type="button">Закрыть</button></div>
+  <p>Выбор нужен только для расписания и его можно изменить в любой момент</p>
+  <div id="chips"></div>
+ </section>
+</div>
+<div class="dialog-backdrop" id="moreOverlay">
+ <section class="sheet" role="dialog" aria-modal="true" aria-labelledby="moreTitle">
+  <div class="sheet-head"><h3 id="moreTitle">Дополнительные разделы</h3><button class="close" id="moreClose" type="button">Закрыть</button></div>
+  <p>Справочная информация и материалы студенческого портала.</p>
+  <div class="more-list" id="sheetMore"></div>
+ </section>
+</div>
 
-    <div class="mMenu__body">
-      <a class="btn btn--primary btn--block" href="app.html">Перейти к преподавателям</a>
+<script>
+const SHEET = '1EKBtXh6KMGzqrgh8P_x1-gIwkV5sP6TFfyH-fHMpiOI';
+const DAYS = [
+ {full:'Понедельник',gid:'1558763581',names:['MONDAY','Monday']},
+ {full:'Вторник',gid:'',names:['TUESDAY','Tuesday']},
+ {full:'Среда',gid:'',names:['WEDNESDAY','Wednesday']},
+ {full:'Четверг',gid:'',names:['THURSDAY','Thursday']},
+ {full:'Пятница',gid:'',names:['FRIDAY','Friday']},
+ {full:'Суббота',gid:'',names:['SATURDAY','Saturday']}
+];
+const TZ='Asia/Bishkek';
+const DEPT_RU={'Computer Science':'Информатика','Applied Mathematics and Informatics':'Прикладная математика и информатика','Systems Engineering and Automation':'Системная инженерия и автоматизация'};
+const PAGES_FALLBACK=[
+ {id:'schedule',title:'Расписание',href:'schedule.html',desc:'Проверь, какая пара следующая'},
+ {id:'teachers',title:'Преподаватели',href:'app.html',desc:'Оценки и честные отзывы студентов',phrases:['Кого уже оценили?','Оставить отзыв о преподавателе','Выбрать преподавателя для электива', 'Бесит препод?']},
+ {id:'news',title:'Новости университета',href:'news.html',desc:'Важные объявления и события',phrases:['Как обойти сейв экзам?','Пароль от вайфая STAFF','Как списать в мидах?']},
+ {id:'faq',title:'Вопросы и ответы',href:'index.html',desc:'Короткие ответы на частые вопросы'},
+  {id:'gos',title:'Гос. экзамены',href:'https://ratemyalatoo.xyz/gos/index.html',desc:'Подготовка и материалы к государственным экзаменам',phrases:['Готов в госам?','Тут ответы на гос экзам!','Гос экзамы тута']}
+];
 
-      <button class="btn btn--ghost btn--block" id="themeToggleMobile" type="button" aria-label="Сменить тему">
-        <span id="themeIconMobile" aria-hidden="true"></span>
-        <span id="themeLabelMobile">Тёмная</span>
-      </button>
+const $=id=>document.getElementById(id);
+const store={
+ get(k){try{return localStorage.getItem(k)}catch(e){return null}},
+ set(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+};
+const pad=n=>String(n).padStart(2,'0');
+const fmt=m=>pad(Math.floor(m/60))+':'+pad(m%60);
+const tm=s=>{const m=s.match(/(\d{1,2})[.:](\d{2})/);return m?(+m[1])*60+(+m[2]):null};
 
-      <a class="mLink" href="#content" id="mGoContent">Смотреть ниже</a>
-      <a class="mLink" href="#faq">FAQ</a>
-      <a class="mLink" href="#top">Наверх</a>
-    </div>
-  </aside>
+function parseCSV(t){
+ const rows=[];let r=[],c='',q=false;
+ for(let i=0;i<t.length;i++){
+  const ch=t[i];
+  if(q){if(ch==='"'){if(t[i+1]==='"'){c+='"';i++}else q=false}else c+=ch}
+  else if(ch==='"')q=true;
+  else if(ch===','){r.push(c);c=''}
+  else if(ch==='\n'){r.push(c);rows.push(r);r=[];c=''}
+  else if(ch!=='\r')c+=ch;
+ }
+ if(c||r.length){r.push(c);rows.push(r)}
+ return rows;
+}
 
-  <main class="wrap">
+const TIME_RE=/^\d{1,2}[.:]\d{2}\s*-\s*\d{1,2}[.:]\d{2}$/;
+const GROUP_RE=/^[A-Z]{2,10}-\d{2}[A-Z]?$/;
 
-    <section class="heroOnly" id="top" aria-label="Главный экран">
-      <h1 class="heroOnly__title">Выбирай электив уверенно.</h1>
+function parseDay(rows,dayName){
+ const head=rows.slice(0,4).some(r=>r.some(c=>c.trim().toUpperCase()===dayName));
+ if(!head)return null;
+ let cols=[],tr=-1;
+ for(let i=0;i<rows.length;i++){
+  const c=rows[i].map((x,j)=>TIME_RE.test(x.trim())?j:-1).filter(j=>j>=0);
+  if(c.length>=8){cols=c;tr=i;break}
+ }
+ if(tr<0)return null;
+ const slots=cols.map(j=>{const [a,b]=rows[tr][j].split('-');return{s:tm(a),e:tm(b)}});
+ const groups={};let dept='';
+ for(let i=tr+1;i<rows.length;i++){
+  const r=rows[i],a=(r[0]||'').trim();
+  if(a==='ROOM'||a==='Code Groups')break;
+  if(!a){const t=(r.slice(1).find(x=>x.trim())||'').trim();if(/^Department/i.test(t))dept=t.replace(/^Department of\s*/i,'');continue}
+  if(!GROUP_RE.test(a))continue;
+  const cells=cols.map(j=>(r[j]||'').trim());
+  const les=[];
+  cells.forEach((txt,k)=>{
+   if(!txt)return;
+   const lunch=/^LUNCH$/i.test(txt);
+   let span=(lunch||/^Advisor hour/i.test(txt))?1:2,e=k+span;
+   for(let n=k+1;n<Math.min(e,cells.length);n++)if(cells[n]){e=n;break}
+   e=Math.min(e,cells.length);
+   les.push({k,e,start:slots[k].s,end:slots[e-1].e,text:txt,lunch});
+  });
+  groups[a]={dept,les};
+ }
+ return{slots,groups};
+}
 
-      <a class="scrollCue" href="#content" aria-label="Прокрутить вниз">
-        <span class="scrollCue__dot" aria-hidden="true"></span>
-        <span class="scrollCue__text">Листай вниз</span>
-      </a>
-    </section>
+function url(p){return `https://docs.google.com/spreadsheets/d/${SHEET}/gviz/tq?tqx=out:csv&headers=0&${p}`}
+async function loadDay(d){
+ const tries=[];
+ if(d.gid)tries.push('gid='+d.gid);
+ d.names.forEach(n=>tries.push('sheet='+encodeURIComponent(n)));
+ for(const p of tries){
+  try{
+   const res=await fetch(url(p));
+   if(!res.ok)continue;
+   const parsed=parseDay(parseCSV(await res.text()),d.names[0]);
+   if(parsed)return parsed;
+  }catch(e){}
+ }
+ return null;
+}
+let data=[],pages=[],group=store.get('rma_group')||'';
+async function loadPages(){
+ try{const r=await fetch('pages.json',{cache:'no-cache'});if(r.ok){const j=await r.json();if(Array.isArray(j)&&j.length)return j}}catch(e){}
+ return PAGES_FALLBACK;
+}
 
-    <div id="content"></div>
+function nowInfo(){
+ const p=new Intl.DateTimeFormat('en-GB',{timeZone:TZ,weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date());
+ const g=t=>p.find(x=>x.type===t).value;
+ const wd=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].indexOf(g('weekday'));
+ return{wd,m:(+g('hour')%24)*60+(+g('minute'))};
+}
+function lessonsOf(di){
+ const g=data[di]&&data[di].groups[group];
+ return g?g.les.filter(l=>!l.lunch).sort((a,b)=>a.start-b.start):[];
+}
+function inText(m){const h=Math.floor(m/60),r=m%60;return h?`${h} ч${r?' '+r+' мин':''}`:`${m} мин`}
 
-    <section class="card intro">
-      <p class="intro__text muted">
-        Оценки, строгость и теги — чтобы понять курс за минуту.
-      </p>
-      <a class="btn btn--primary btn--lg" href="app.html">Открыть приложение</a>
-    </section>
+function item(cls,label,labCls,time,text){
+ const d=document.createElement('div');d.className='it '+cls;
+ const l=document.createElement('div');l.className='lab '+labCls;l.textContent=label;
+ const t=document.createElement('div');t.className='tm';t.textContent=time;
+ const n=document.createElement('div');n.className='nm';n.textContent=text;n.title=text;
+ d.append(l,t,n);return d;
+}
+function note(txt){const d=document.createElement('div');d.className='schedule-empty';d.textContent=txt;return d}
+function renderNow(){
+ const box=$('now');box.replaceChildren();
+ $('wTitle').textContent=group?`Расписание · ${group}`:'Расписание · на сегодня';
+ if(!group){box.append(note('Выберите группу — здесь появятся ваши ближайшие занятия.'));return}
+ const{wd,m}=nowInfo();
+ const today=wd<6?lessonsOf(wd):[];
+ const cur=today.find(l=>m>=l.start&&m<l.end);
+ const after=today.filter(l=>l.start>m&&l!==cur);
+ let main,next,label,cls='';
+ if(cur){main=cur;next=after[0];label=`Сейчас · до ${fmt(cur.end)}`;cls='now'}
+ else if(after.length){main=after[0];next=after[1];label=`Через ${inText(after[0].start-m)}`}
+ else{
+  for(let k=1;k<=7&&!main;k++){
+   const di=(wd+k)%7;if(di>5)continue;
+   const ls=lessonsOf(di);
+   if(ls.length){main=ls[0];next=ls[1];label=k===1?'Завтра':DAYS[di].full}
+  }
+ }
+ if(!main){box.append(note('В ближайшие дни занятий нет.'));return}
+ const g=document.createElement('div');g.className='rows';
+ g.append(item('',label,cls,fmt(main.start),main.text));
+ if(next)g.append(item('nx','Следующее занятие','',fmt(next.start),next.text));
+ box.append(g);
+}
 
-    <section class="grid3" aria-label="Ключевые преимущества">
-      <article class="card imgCard">
-        <img class="imgCard__img" src="images/cat_is_watching-alatoo.jpg" alt="Сравнивай" loading="lazy">
-        <div class="imgCard__body">
-          <div class="imgCard__title">Сравнивай</div>
-          <div class="imgCard__text muted">Качество, строгость, повторный выбор.</div>
-        </div>
-      </article>
+function renderWho(){
+ $('groupLabel').textContent=group||'не выбрана';
+}
+function allGroups(){
+ const map=new Map();
+ data.forEach(d=>d&&Object.entries(d.groups).forEach(([k,v])=>{if(!map.has(k))map.set(k,v.dept)}));
+ return map;
+}
+function openDlg(){
+ const chips=$('chips');chips.replaceChildren();
+ const by={};
+ allGroups().forEach((dep,g)=>{(by[dep]=by[dep]||[]).push(g)});
+ const keys=Object.keys(by);
+ if(!keys.length)chips.textContent='Список групп пока не загружен. Обновите страницу.';
+ keys.forEach(dep=>{
+  const h=document.createElement('div');h.className='dept';h.textContent=DEPT_RU[dep]||dep||'Группы';
+  const w=document.createElement('div');w.className='chips';
+  by[dep].forEach(g=>{
+   const b=document.createElement('button');b.type='button';b.textContent=g;
+   if(g===group)b.className='on';
+   b.onclick=()=>{group=g;store.set('rma_group',g);$('groupOverlay').classList.remove('open');renderWho();renderNow()};
+   w.append(b);
+  });
+  chips.append(h,w);
+ });
+ $('groupOverlay').classList.add('open');
+}
 
-      <article class="card imgCard">
-        <img class="imgCard__img" src="images/cat_is_does_not_understanding_math-=(((.jpg" alt="Понимай" loading="lazy">
-        <div class="imgCard__body">
-          <div class="imgCard__title">Понимай</div>
-          <div class="imgCard__text muted">Теги показывают реальность курса.</div>
-        </div>
-      </article>
+const icons={
+ schedule:'<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 9h18M8 13h3M8 17h7"/></svg>',
+ teachers:'<svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20v-1a6 6 0 0 1 12 0v1M16 5a3 3 0 0 1 0 6M18 14a5 5 0 0 1 3 5v1"/></svg>',
+ news:'<svg viewBox="0 0 24 24"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"/></svg>',
+ faq:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.6 2.6 0 1 1 4.4 1.9c-1.2 1-1.9 1.3-1.9 2.6M12 17h.01"/></svg>',
+ about:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>'
+};
+function pageId(p){return p.id||({'Расписание':'schedule','Оценка преподавателей':'teachers','Новости':'news','Новости университета':'news','Вопросы и ответы':'faq','О проекте':'about'}[p.title]||'other')}
+function pageHref(p){return p.href||({'schedule':'schedule.html','teachers':'app.html','news':'news.html','faq':'faq.html','about':'about.html','gos':'https://ratemyalatoo.xyz/gos/index.html'}[pageId(p)]||'#')}
+function pageLink(p,primary=false){
+ const id=pageId(p),a=document.createElement('a');a.href=pageHref(p);a.className=primary?'feature':'more-link';
+ if(primary){
+  const art=document.createElement('div');art.className='feature-art';
+  const image=document.createElement('img');image.src=`assets/${id==='schedule'?'schedule':id==='teachers'?'teachers':id==='gos'?'gos':'news'}.webp`;image.alt='';image.loading='lazy';art.append(image);
+  const top=document.createElement('div');top.className='feature-top';
+  const ico=document.createElement('span');ico.className='feature-icon';ico.innerHTML=icons[id]||icons.about;
+  const arrow=document.createElement('span');arrow.className='feature-arrow';arrow.textContent='↗';top.append(ico,arrow);
+  const title=document.createElement('h3');title.className='feature-title';title.textContent=p.title;
+  const desc=document.createElement('p');desc.className='feature-desc';desc.textContent=p.desc||'Откройте нужный раздел студенческого портала';
+  const meta=document.createElement('span');meta.className='feature-meta';meta.textContent='Перейти в раздел';
+  a.append(art,top,title,desc,meta);
+ }else{
+  const left=document.createElement('span');const title=document.createElement('span');title.className='more-title';title.textContent=p.title;
+  const desc=document.createElement('span');desc.className='more-desc';desc.textContent=p.desc||'Дополнительная информация';
+  left.append(title,desc);const arrow=document.createElement('span');arrow.className='more-arrow';arrow.textContent='↗';a.append(left,arrow);
+ }
+ return a;
+}
+function renderTools(){
+ const primary=$('primaryPages'),more=$('morePages'),sheet=$('sheetMore');primary.replaceChildren();more.replaceChildren();sheet.replaceChildren();
+ const normalized=pages.map(p=>({...p,id:pageId(p)}));
+ const mainIds=['schedule','teachers','news','gos'];
+ const main=mainIds.map(id=>normalized.find(p=>p.id===id)).filter(Boolean);
+ const extra=normalized.filter(p=>!mainIds.includes(p.id));
+ main.forEach(p=>primary.append(pageLink(p,true)));
+ extra.forEach(p=>{more.append(pageLink(p));sheet.append(pageLink(p))});
+ const schedule=normalized.find(p=>p.id==='schedule');
+ if(schedule)$('wMore').href=pageHref(schedule);
+}
+function startHow(){
+ const live=pages.filter(p=>p.phrases&&p.phrases.length);
+ const choices=[];live.forEach(p=>p.phrases.forEach(t=>choices.push({href:pageHref(p),t})));
+ if(!choices.length)return;
+ for(let i=choices.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[choices[i],choices[j]]=[choices[j],choices[i]]}
+ let index=0;const a=$('howLink');
+ const show=()=>{a.textContent=choices[index].t.replace(/\?$/,'')+'?';a.href=choices[index].href};
+ show();$('how').hidden=false;
+ if(choices.length>1)setInterval(()=>{index=(index+1)%choices.length;show()},7000);
+}
+function setActiveNav(){
+ const path=location.pathname.split('/').pop()||'index.html';
+ const active=path==='schedule.html'?'schedule':path==='app.html'?'teachers':path==='index.html'?'home':'more';
+ document.querySelectorAll('.nav-item[data-nav]').forEach(a=>a.classList.toggle('active',a.dataset.nav===active));
+}
+function stampDate(){
+ $('todayStamp').textContent=new Intl.DateTimeFormat('ru-RU',{timeZone:TZ,weekday:'long',day:'numeric',month:'long'}).format(new Date());
+}
+$('groupButton').onclick=openDlg;
+$('groupOverlay').addEventListener('click',e=>{if(e.target===$('groupOverlay'))$('groupOverlay').classList.remove('open')});
+$('dlgX').onclick=()=>$('groupOverlay').classList.remove('open');
+$('moreNav').onclick=()=>$('moreOverlay').classList.add('open');
+$('moreClose').onclick=()=>$('moreOverlay').classList.remove('open');
+$('moreOverlay').addEventListener('click',e=>{if(e.target===$('moreOverlay'))$('moreOverlay').classList.remove('open')});
 
-      <article class="card imgCard">
-        <img class="imgCard__img" src="images/cat_helps_another_cat_funn.jpg" alt="Выбирай" loading="lazy">
-        <div class="imgCard__body">
-          <div class="imgCard__title">Выбирай</div>
-          <div class="imgCard__text muted">Меньше сомнений — больше ясности.</div>
-        </div>
-      </article>
-    </section>
-
-    <section class="card miniCardWrap" aria-label="Пример карточки">
-      <div class="miniCard">
-        <div class="miniCard__row">
-          <div class="miniCard__name">Asanov Uson</div>
-          <div class="miniCard__score">
-            <span class="dot" aria-hidden="true"></span>
-            <span class="miniCard__num">4.6</span>
-          </div>
-        </div>
-        <div class="miniCard__meta muted">27 отзывов · 78% взяли бы снова</div>
-        <div class="miniCard__chips">
-          <span class="chip">Фидбек</span>
-          <span class="chip">Домашка</span>
-          <span class="chip">Справедливо</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="card faq" id="faq" aria-label="FAQ">
-      <div class="faq__head">
-        <h2 class="h2">FAQ</h2>
-      </div>
-
-      <details class="faqItem" open>
-        <summary class="faqQ">
-          <span>Это анонимно?</span>
-          <span class="chev" aria-hidden="true">⌄</span>
-        </summary>
-        <div class="faqA muted">Да. Без аккаунта и без личных данных.</div>
-      </details>
-
-      <details class="faqItem">
-        <summary class="faqQ">
-          <span>Что именно оценивается?</span>
-          <span class="chev" aria-hidden="true">⌄</span>
-        </summary>
-        <div class="faqA muted">Качество курса, строгость, “взял(а) бы снова” и теги.</div>
-      </details>
-
-      <details class="faqItem">
-        <summary class="faqQ">
-          <span>Почему нет комментариев?</span>
-          <span class="chev" aria-hidden="true">⌄</span>
-        </summary>
-        <div class="faqA muted">Чтобы не было хаоса. Теги дают пользу без токсичности.</div>
-      </details>
-    </section>
-
-    <section class="card endCta">
-      <div>
-        <div class="endCta__title">Готов перейти?</div>
-        <div class="muted small">Открой преподавателей и выбери уверенно.</div>
-      </div>
-      <a class="btn btn--primary btn--lg" href="app.html">Перейти к преподавателям</a>
-    </section>
-
-  </main>
-
-  <footer class="footer">
-    <div class="wrap footer__row">
-      <div class="muted">© No Name Students</div>
-      <div class="footer__links">
-        <a class="link" href="#top">Наверх</a>
-        <a class="link" href="app.html">Преподаватели</a>
-      </div>
-    </div>
-  </footer>
-
-  <script>
-    (function(){
-      const root = document.documentElement;
-
-      // Theme controls
-      const dBtn = document.getElementById('themeToggleDesktop');
-      const dLabel = document.getElementById('themeLabelDesktop');
-      const dIcon = document.getElementById('themeIconDesktop');
-
-      const mBtn = document.getElementById('themeToggleMobile');
-      const mLabel = document.getElementById('themeLabelMobile');
-      const mIcon = document.getElementById('themeIconMobile');
-
-      function applyTheme(theme){
-        root.setAttribute('data-theme', theme);
-        try { localStorage.setItem('theme', theme); } catch(e){}
-        const isLight = theme === 'light';
-        if(dLabel) dLabel.textContent = isLight ? 'Светлая' : 'Тёмная';
-        if(dIcon) dIcon.textContent = isLight ? '☀️' : '🌙';
-        if(mLabel) mLabel.textContent = isLight ? 'Светлая' : 'Тёмная';
-        if(mIcon) mIcon.textContent = isLight ? '☀️' : '🌙';
-      }
-
-      const saved = (()=>{ try { return localStorage.getItem('theme'); } catch(e){ return null; }})();
-      applyTheme(saved || root.getAttribute('data-theme') || 'dark');
-
-      function toggleTheme(){
-        const cur = root.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
-        applyTheme(cur === 'light' ? 'dark' : 'light');
-      }
-
-      dBtn && dBtn.addEventListener('click', toggleTheme);
-      mBtn && mBtn.addEventListener('click', toggleTheme);
-
-      // Mobile menu
-      const openBtn = document.getElementById('mMenuBtn');
-      const menu = document.getElementById('mMenu');
-      const overlay = document.getElementById('mOverlay');
-      const closeBtn = document.getElementById('mClose');
-      const goContent = document.getElementById('mGoContent');
-
-      function openMenu(){
-        menu.hidden = false;
-        overlay.hidden = false;
-        requestAnimationFrame(() => {
-          menu.classList.add('isOpen');
-          overlay.classList.add('isOpen');
-        });
-        openBtn.setAttribute('aria-expanded', 'true');
-        document.body.classList.add('noScroll');
-      }
-
-      function closeMenu(){
-        menu.classList.remove('isOpen');
-        overlay.classList.remove('isOpen');
-        openBtn.setAttribute('aria-expanded', 'false');
-        document.body.classList.remove('noScroll');
-        setTimeout(() => {
-          menu.hidden = true;
-          overlay.hidden = true;
-        }, 160);
-      }
-
-      openBtn && openBtn.addEventListener('click', () => {
-        const expanded = openBtn.getAttribute('aria-expanded') === 'true';
-        expanded ? closeMenu() : openMenu();
-      });
-
-      closeBtn && closeBtn.addEventListener('click', closeMenu);
-      overlay && overlay.addEventListener('click', closeMenu);
-      goContent && goContent.addEventListener('click', closeMenu);
-
-      document.addEventListener('keydown', (e) => {
-        if(e.key === 'Escape' && openBtn.getAttribute('aria-expanded') === 'true') closeMenu();
-      });
-    })();
-  </script>
+(async function init(){
+ stampDate();setActiveNav();
+ pages=await loadPages();renderTools();startHow();
+ let cached=null;
+ try{const c=JSON.parse(store.get('rma_cache')||'null');if(Array.isArray(c))cached=c}catch(e){}
+ if(cached)data=cached;
+ const fresh=await Promise.all(DAYS.map(loadDay));
+ if(fresh.some(Boolean)){data=fresh.map((f,i)=>f||(cached&&cached[i])||null);store.set('rma_cache',JSON.stringify(data))}
+ if(!data.some(Boolean)){
+  $('now').replaceChildren(note('Не удалось загрузить расписание. Проверьте интернет и обновите страницу.'));
+  renderWho();return;
+ }
+ if(!group||!allGroups().has(group)){group='';renderWho();renderNow();openDlg()}
+ else{renderWho();renderNow()}
+ setInterval(renderNow,30000);
+})();
+</script>
 </body>
 </html>

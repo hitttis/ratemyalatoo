@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f4f2ed">
+  <meta name="description" content="Расписание занятий студентов Ala-Too International University.">
+  <title>Расписание ★ RateMyAlatoo</title>
+  <link rel="icon" href="favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <link rel="stylesheet" href="schedule.css">
+</head>
+<body>
+<header class="topbar"><div class="wrap topbar-inner">
+  <a class="brand" href="index.html"><img src="logo.png" alt="RateMyAlatoo" onerror="this.hidden=true"><span>RateMyAlatoo</span></a>
+  <div class="top-actions"><button class="text-button" id="themeToggle" type="button" aria-label="Сменить тему">◐ <span>Тема</span></button><a class="back-link" href="index.html">На главную ↗</a></div>
+</div></header>
+<main class="wrap">
+  <div class="breadcrumbs"><a href="index.html">Главная</a><span>/</span><span>Расписание</span></div>
+  <section class="page-heading"><div><div class="eyebrow">Ala-Too International University</div><h1>Расписание занятий</h1><p>Выберите направление и группу, чтобы посмотреть пары на нужный день.</p></div><div class="heading-note">Учебная неделя<br><strong>Понедельник — суббота</strong></div></section>
+  <section class="filters" aria-label="Выбор группы">
+    <label class="field"><span>Направление</span><select id="departmentSelect"><option value="">Загрузка…</option></select></label>
+    <label class="field"><span>Группа</span><select id="groupSelect"><option value="">Загрузка…</option></select></label>
+    <div class="filter-meta"><span id="groupCount">—</span><span class="status-line"><i id="connectionDot"></i><span id="connectionStatus">Подключение…</span></span></div>
+  </section>
+  <section class="schedule-panel">
+    <div class="panel-head"><div><div class="eyebrow">Ваш учебный план</div><h2 id="scheduleDayTitle">Понедельник</h2></div><button class="refresh-button" id="refreshButton" type="button"><span>↻</span> Обновить</button></div>
+    <div class="day-tabs" id="dayTabs" role="tablist" aria-label="День недели"></div>
+    <div class="schedule-body" id="scheduleBody" aria-live="polite"><div class="state"><span class="spinner"></span><strong>Загружаем расписание</strong></div></div>
+    <div class="panel-foot"><span>Данные загружаются из опубликованной таблицы университета.</span><span>Время — Бишкек (UTC+6)</span></div>
+  </section>
+  <div class="page-note"><span class="note-mark">i</span><p>Содержание ячеек расписания отображается так, как оно указано в исходной таблице. Если в ячейке несколько строк, они сохраняются вместе.</p></div>
+</main>
+<footer class="footer"><div class="wrap footer-row"><span>© RateMyAlatoo · Created Students For Students</span><div><a href="index.html">Главная</a><a href="app.html">Преподаватели</a><a href="news.html">Новости</a></div></div></footer>
+<nav class="bottom-nav" aria-label="Основная навигация">
+ <a href="index.html"><span class="nav-icon">⌂</span><span>Главная</span></a>
+ <a class="active" href="schedule.html"><span class="nav-icon">▦</span><span>Расписание</span></a>
+ <a href="app.html"><span class="nav-icon">♙</span><span>Преподаватели</span></a>
+ <a href="news.html"><span class="nav-icon">≡</span><span>Новости</span></a>
+</nav>
+<script src="schedule.js"></script>
+</body></html>
